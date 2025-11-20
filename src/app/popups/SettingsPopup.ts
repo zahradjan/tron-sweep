@@ -9,6 +9,7 @@ import { Label } from "../ui/Label";
 import { RoundedBox } from "../ui/RoundedBox";
 import { VolumeSlider } from "../ui/VolumeSlider";
 import { userSettings } from "../utils/userSettings";
+import { Colors } from "../utils/colors";
 
 /** Popup for volume */
 export class SettingsPopup extends Container {
@@ -50,7 +51,7 @@ export class SettingsPopup extends Container {
     this.title = new Label({
       text: "Settings",
       style: {
-        fill: 0xec1561,
+        fill: Colors.Cyan,
         fontSize: 50,
       },
     });
@@ -65,7 +66,7 @@ export class SettingsPopup extends Container {
     this.versionLabel = new Label({
       text: `Version ${APP_VERSION}`,
       style: {
-        fill: 0xffffff,
+        fill: Colors.Cyan,
         fontSize: 12,
       },
     });
@@ -127,7 +128,7 @@ export class SettingsPopup extends Container {
     await animate(
       this.panel.pivot,
       { y: 0 },
-      { duration: 0.3, ease: "backOut" },
+      { duration: 0.3, ease: "backOut" }
     );
   }
 
@@ -144,7 +145,7 @@ export class SettingsPopup extends Container {
       {
         duration: 0.3,
         ease: "backIn",
-      },
+      }
     );
   }
 }

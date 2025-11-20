@@ -3,6 +3,7 @@ import { FancyButton } from "@pixi/ui";
 import { engine } from "../getEngine";
 
 import { Label } from "./Label";
+import { Colors } from "../utils/colors";
 
 const defaultButtonOptions = {
   text: "",
@@ -21,13 +22,13 @@ export class Button extends FancyButton {
     const opts = { ...defaultButtonOptions, ...options };
 
     super({
-      defaultView: "button.png",
-      nineSliceSprite: [38, 50, 38, 50],
+      defaultView: "tron-button.png",
+      nineSliceSprite: [280, 180, 280, 140],
       anchor: 0.5,
       text: new Label({
         text: opts.text,
         style: {
-          fill: 0x4a4a4a,
+          fill: Colors.Cyan,
           align: "center",
           fontSize: opts.fontSize,
         },

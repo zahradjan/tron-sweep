@@ -13,6 +13,7 @@ declare global {
  * Importing these modules will automatically register there plugins with the engine.
  */
 import "@pixi/sound";
+import { Colors } from "./app/utils/colors";
 // import "@esotericsoftware/spine-pixi-v8";
 
 // Create a new creation engine instance
@@ -22,7 +23,7 @@ setEngine(engine);
 (async () => {
   // Initialize the creation engine instance
   await engine.init({
-    background: "#2a2a2a",
+    background: Colors.Tarawera,
     resizeOptions: { minWidth: 768, minHeight: 1024, letterbox: false },
   });
 

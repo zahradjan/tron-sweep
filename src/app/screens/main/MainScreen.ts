@@ -20,7 +20,6 @@ export class MainScreen extends Container {
   private pauseButton: FancyButton;
   private settingsButton: FancyButton;
   private addButton: FancyButton;
-  private removeButton: FancyButton;
   private bouncer: Bouncer;
   private paused = false;
   private background: Sprite;
@@ -70,20 +69,12 @@ export class MainScreen extends Container {
     this.addChild(this.settingsButton);
 
     this.addButton = new Button({
-      text: "Add",
-      width: 175,
-      height: 110,
+      text: "Sweep",
+      width: 300,
+      height: 115,
     });
     this.addButton.onPress.connect(() => this.bouncer.add());
     this.addChild(this.addButton);
-
-    this.removeButton = new Button({
-      text: "Remove",
-      width: 175,
-      height: 110,
-    });
-    this.removeButton.onPress.connect(() => this.bouncer.remove());
-    this.addChild(this.removeButton);
   }
 
   /** Prepare the screen just before showing */
@@ -128,9 +119,7 @@ export class MainScreen extends Container {
     this.pauseButton.y = 30;
     this.settingsButton.x = width - 30;
     this.settingsButton.y = 30;
-    this.removeButton.x = width / 2 - 100;
-    this.removeButton.y = height - 75;
-    this.addButton.x = width / 2 + 100;
+    this.addButton.x = width / 2;
     this.addButton.y = height - 75;
 
     this.bouncer.resize(width, height);
@@ -144,7 +133,6 @@ export class MainScreen extends Container {
       this.pauseButton,
       this.settingsButton,
       this.addButton,
-      this.removeButton,
     ];
 
     let finalPromise!: AnimationPlaybackControls;

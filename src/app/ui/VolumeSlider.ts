@@ -2,6 +2,7 @@ import { Slider } from "@pixi/ui";
 import { Graphics } from "pixi.js";
 
 import { Label } from "./Label";
+import { Colors } from "../utils/colors";
 
 /**
  * A volume slider component to be used in the Settings popup.
@@ -17,10 +18,10 @@ export class VolumeSlider extends Slider {
     const border = 4;
     const handleRadius = 14;
     const handleBorder = 4;
-    const meshColor = 0xec1561;
-    const fillColor = 0xef6294;
-    const borderColor = 0xec1561;
-    const backgroundColor = 0xffffff;
+    const meshColor = Colors.Tarawera;
+    const fillColor = Colors.DeepSeaGreen;
+    const borderColor = Colors.Cyan;
+    const backgroundColor = Colors.Tarawera;
 
     const bg = new Graphics()
       .roundRect(0, 0, width, height, radius)
@@ -64,7 +65,7 @@ export class VolumeSlider extends Slider {
       text: label,
       style: {
         align: "left",
-        fill: 0x4a4a4a,
+        fill: Colors.Cyan,
         fontSize: 18,
       },
     });

@@ -2,6 +2,7 @@ import { CircularProgressBar } from "@pixi/ui";
 import { animate } from "motion";
 import type { ObjectTarget } from "motion/react";
 import { Container, Sprite, Texture } from "pixi.js";
+import { Colors } from "../utils/colors";
 
 /** Screen shown while loading assets */
 export class LoadScreen extends Container {
@@ -16,8 +17,8 @@ export class LoadScreen extends Container {
     super();
 
     this.progressBar = new CircularProgressBar({
-      backgroundColor: "#3d3d3d",
-      fillColor: "#e72264",
+      backgroundColor: Colors.MediumGrey,
+      fillColor: Colors.Cyan,
       radius: 100,
       lineWidth: 15,
       value: 20,
