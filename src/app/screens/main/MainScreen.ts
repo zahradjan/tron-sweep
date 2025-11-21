@@ -2,7 +2,7 @@ import { FancyButton } from "@pixi/ui";
 import { animate } from "motion";
 import type { AnimationPlaybackControls } from "motion/react";
 import type { Ticker } from "pixi.js";
-import { Container, Sprite } from "pixi.js";
+import { Container, Sprite, Texture } from "pixi.js";
 
 import { engine } from "../../getEngine";
 import { PausePopup } from "../../popups/PausePopup";
@@ -10,6 +10,7 @@ import { SettingsPopup } from "../../popups/SettingsPopup";
 import { Button } from "../../ui/Button";
 
 import { Bouncer } from "./Bouncer";
+import { Grid } from "./Grid";
 
 /** The screen that holds the app */
 export class MainScreen extends Container {
@@ -23,6 +24,8 @@ export class MainScreen extends Container {
   private bouncer: Bouncer;
   private paused = false;
   private background: Sprite;
+  private logo: Sprite;
+  private grid: Grid;
 
   constructor() {
     super();
@@ -32,6 +35,21 @@ export class MainScreen extends Container {
     this.mainContainer = new Container();
     this.addChild(this.mainContainer);
     this.bouncer = new Bouncer();
+    this.logo = new Sprite({
+      texture: Texture.from("tron-sweep-logo.png"),
+      anchor: 0.5,
+      scale: 0.2,
+    });
+
+    this.addChild(this.logo);
+
+    this.grid = new Grid({
+      rows: 5,
+      cols: 4,
+      cellSize: 125,
+    });
+    this.grid.pivot.set(this.grid.width / 2, this.grid.height / 2);
+    this.addChild(this.grid);
 
     const buttonAnimations = {
       hover: {
@@ -121,6 +139,10 @@ export class MainScreen extends Container {
     this.settingsButton.y = 30;
     this.addButton.x = width / 2;
     this.addButton.y = height - 75;
+    this.logo.x = width / 2;
+    this.logo.y = 100;
+    this.grid.x = width / 2;
+    this.grid.y = height / 2;
 
     this.bouncer.resize(width, height);
   }

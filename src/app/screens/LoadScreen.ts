@@ -19,7 +19,7 @@ export class LoadScreen extends Container {
     this.progressBar = new CircularProgressBar({
       backgroundColor: Colors.MediumGrey,
       fillColor: Colors.Cyan,
-      radius: 100,
+      radius: 250,
       lineWidth: 15,
       value: 20,
       backgroundAlpha: 0.5,
@@ -33,9 +33,9 @@ export class LoadScreen extends Container {
     this.addChild(this.progressBar);
 
     this.pixiLogo = new Sprite({
-      texture: Texture.from("logo.svg"),
+      texture: Texture.from("tron-sweep-logo.png"),
       anchor: 0.5,
-      scale: 0.2,
+      scale: 0.5,
     });
     this.addChild(this.pixiLogo);
   }
