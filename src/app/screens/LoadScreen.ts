@@ -33,9 +33,9 @@ export class LoadScreen extends Container {
     this.addChild(this.progressBar);
 
     this.pixiLogo = new Sprite({
-      texture: Texture.from("tron-sweep-logo.png"),
+      texture: Texture.from("tron-sweep-logo-main.png"),
       anchor: 0.5,
-      scale: 0.5,
+      scale: 0.25,
     });
     this.addChild(this.pixiLogo);
   }

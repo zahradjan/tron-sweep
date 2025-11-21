@@ -11,6 +11,7 @@ import { Button } from "../../ui/Button";
 
 import { Grid } from "./Grid";
 import { randomInt } from "../../../engine/utils/random";
+import { StartGamePopup } from "../../popups/StartGamePopup";
 
 /** The screen that holds the app */
 export class MainScreen extends Container {
@@ -28,14 +29,15 @@ export class MainScreen extends Container {
 
   constructor() {
     super();
+    engine().navigation.presentPopup(StartGamePopup);
+
     this.background = Sprite.from("tron-arena.png");
     this.background.anchor.set(0.5);
     this.addChild(this.background);
     this.mainContainer = new Container();
     this.addChild(this.mainContainer);
-
     this.logo = new Sprite({
-      texture: Texture.from("tron-sweep-logo.png"),
+      texture: Texture.from("tron-sweep-logo-main.png"),
       anchor: 0.5,
       scale: 0.2,
     });
@@ -165,7 +167,9 @@ export class MainScreen extends Container {
 
   /** Show screen with animations */
   public async show(): Promise<void> {
-    engine().audio.bgm.play("main/sounds/bgm-main.mp3", { volume: 0.5 });
+    engine().audio.bgm.play("main/sounds/tron-legacy-end-of-line.mp3", {
+      volume: 0.8,
+    });
 
     const elementsToAnimate = [
       this.pauseButton,
