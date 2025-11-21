@@ -9,8 +9,8 @@ import { PausePopup } from "../../popups/PausePopup";
 import { SettingsPopup } from "../../popups/SettingsPopup";
 import { Button } from "../../ui/Button";
 
-import { Bouncer } from "./Bouncer";
 import { Grid } from "./Grid";
+import { randomInt } from "../../../engine/utils/random";
 
 /** The screen that holds the app */
 export class MainScreen extends Container {
@@ -20,8 +20,7 @@ export class MainScreen extends Container {
   public mainContainer: Container;
   private pauseButton: FancyButton;
   private settingsButton: FancyButton;
-  private addButton: FancyButton;
-  private bouncer: Bouncer;
+  private sweepButton: FancyButton;
   private paused = false;
   private background: Sprite;
   private logo: Sprite;
@@ -34,7 +33,7 @@ export class MainScreen extends Container {
     this.addChild(this.background);
     this.mainContainer = new Container();
     this.addChild(this.mainContainer);
-    this.bouncer = new Bouncer();
+
     this.logo = new Sprite({
       texture: Texture.from("tron-sweep-logo.png"),
       anchor: 0.5,
@@ -86,13 +85,32 @@ export class MainScreen extends Container {
     );
     this.addChild(this.settingsButton);
 
-    this.addButton = new Button({
+    this.sweepButton = new Button({
       text: "Sweep",
       width: 300,
       height: 115,
     });
-    this.addButton.onPress.connect(() => this.bouncer.add());
-    this.addChild(this.addButton);
+    this.sweepButton.onPress.connect(async () => {
+      console.log("Clicked");
+      const availableCells = this.grid
+        .getCells()
+        .filter((cell) => !cell.getIsRevealed());
+
+      if (!availableCells.length) {
+        console.log("All cells already revealed!");
+        return;
+      }
+      const numToReveal = randomInt(1, availableCells.length);
+      const cellsToReveal = availableCells.slice(
+        0,
+        Math.min(numToReveal, availableCells.length)
+      );
+
+      for (const cell of cellsToReveal) {
+        await cell.reveal();
+      }
+    });
+    this.addChild(this.sweepButton);
   }
 
   /** Prepare the screen just before showing */
@@ -102,7 +120,7 @@ export class MainScreen extends Container {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public update(_time: Ticker) {
     if (this.paused) return;
-    this.bouncer.update();
+    // this.bouncer.update();
   }
 
   /** Pause gameplay - automatically fired when a popup is presented */
@@ -137,14 +155,12 @@ export class MainScreen extends Container {
     this.pauseButton.y = 30;
     this.settingsButton.x = width - 30;
     this.settingsButton.y = 30;
-    this.addButton.x = width / 2;
-    this.addButton.y = height - 75;
+    this.sweepButton.x = width / 2;
+    this.sweepButton.y = height - 75;
     this.logo.x = width / 2;
     this.logo.y = 100;
     this.grid.x = width / 2;
     this.grid.y = height / 2;
-
-    this.bouncer.resize(width, height);
   }
 
   /** Show screen with animations */
@@ -154,7 +170,7 @@ export class MainScreen extends Container {
     const elementsToAnimate = [
       this.pauseButton,
       this.settingsButton,
-      this.addButton,
+      this.sweepButton,
     ];
 
     let finalPromise!: AnimationPlaybackControls;
@@ -168,7 +184,6 @@ export class MainScreen extends Container {
     }
 
     await finalPromise;
-    this.bouncer.show(this);
   }
 
   /** Hide screen with animations */

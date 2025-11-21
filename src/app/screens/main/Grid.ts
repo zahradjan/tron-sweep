@@ -1,5 +1,6 @@
 import { Container, Graphics } from "pixi.js";
 import { Colors } from "../../utils/colors";
+import { Cell } from "./Cell";
 
 export interface GridOptions {
   rows: number;
@@ -7,11 +8,13 @@ export interface GridOptions {
   cellSize: number;
   borderColor?: number;
   fillColor?: number;
+  gap?: number;
 }
 
 export class Grid extends Container {
-  private cells: Graphics[][] = [];
+  private cells: Cell[] = [];
   private options: Required<GridOptions>;
+  private gridBorderLines: Graphics;
 
   constructor(options: GridOptions) {
     super();
@@ -19,53 +22,57 @@ export class Grid extends Container {
     this.options = {
       borderColor: Colors.Cyan,
       fillColor: Colors.Tarawera,
+      gap: 2,
       ...options,
     };
+    this.gridBorderLines = new Graphics();
+    this.addChild(this.gridBorderLines);
+
     this.createGrid();
+    this.drawGridBorderLines();
   }
 
   private createGrid() {
-    const { rows, cols, cellSize, borderColor, fillColor } = this.options;
-
+    const { rows, cols, cellSize, gap } = this.options;
     for (let row = 0; row < rows; row++) {
-      this.cells[row] = [];
-
       for (let col = 0; col < cols; col++) {
-        const cell = new Graphics();
-
-        // Draw cell background
-        cell.rect(0, 0, cellSize, cellSize);
-        cell.fill({ color: fillColor, alpha: 0 });
-        cell.stroke({ color: borderColor, width: 2 });
+        const cell = new Cell(cellSize);
 
         // Position cell
-        cell.x = col * cellSize;
-        cell.y = row * cellSize;
+        cell.x = col * (cellSize + gap) + gap / 2;
+        cell.y = row * (cellSize + gap) + gap / 2;
 
-        // Make interactive
-        cell.eventMode = "static";
-        cell.cursor = "pointer";
-
-        // Add hover effect
-        cell.on("pointerover", () => {
-          cell.clear();
-          cell.rect(0, 0, cellSize, cellSize);
-          cell.fill({ color: Colors.DarkBlue, alpha: 0.5 });
-          cell.stroke({ color: borderColor, width: 2 });
-        });
-
-        cell.on("pointerout", () => {
-          cell.clear();
-          cell.rect(0, 0, cellSize, cellSize);
-          cell.fill({ color: fillColor, alpha: 0 });
-          cell.stroke({ color: borderColor, width: 2 });
-        });
-
-        // cell.on("pointertap", () => this.onCellClick(row, col));
-
-        this.cells[row][col] = cell;
+        this.cells.push(cell);
         this.addChild(cell);
       }
     }
+  }
+
+  private drawGridBorderLines() {
+    const { rows, cols, cellSize, borderColor, gap } = this.options;
+    const totalWidth = cols * (cellSize + gap);
+    const totalHeight = rows * (cellSize + gap);
+
+    this.gridBorderLines.clear();
+
+    // Draw vertical lines
+    for (let col = 0; col <= cols; col++) {
+      const x = col * (cellSize + gap);
+      this.gridBorderLines.moveTo(x, 0);
+      this.gridBorderLines.lineTo(x, totalHeight);
+    }
+
+    // Draw horizontal lines
+    for (let row = 0; row <= rows; row++) {
+      const y = row * (cellSize + gap);
+      this.gridBorderLines.moveTo(0, y);
+      this.gridBorderLines.lineTo(totalWidth, y);
+    }
+
+    this.gridBorderLines.stroke({ color: borderColor, width: 2 });
+  }
+
+  public getCells(): Cell[] {
+    return this.cells;
   }
 }
