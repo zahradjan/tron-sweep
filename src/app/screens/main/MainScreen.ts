@@ -29,7 +29,6 @@ export class MainScreen extends Container {
 
   constructor() {
     super();
-    engine().navigation.presentPopup(StartGamePopup);
 
     this.background = Sprite.from("tron-arena.png");
     this.background.anchor.set(0.5);
@@ -167,6 +166,7 @@ export class MainScreen extends Container {
 
   /** Show screen with animations */
   public async show(): Promise<void> {
+    engine().navigation.presentPopup(StartGamePopup);
     engine().audio.bgm.play("main/sounds/tron-legacy-end-of-line.mp3", {
       volume: 0.8,
     });

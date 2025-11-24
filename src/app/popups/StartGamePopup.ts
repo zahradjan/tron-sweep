@@ -3,21 +3,20 @@ import { BlurFilter, Container, Sprite, Texture } from "pixi.js";
 
 import { engine } from "../getEngine";
 import { Button } from "../ui/Button";
-import { Label } from "../ui/Label";
 import { RoundedBox } from "../ui/RoundedBox";
-import { Colors } from "../utils/colors";
+import { SettingsPopup } from "./SettingsPopup";
 
 export class StartGamePopup extends Container {
   /** The dark semi-transparent background covering current screen */
   private bg: Sprite;
   /** Container for the popup UI components */
   private panel: Container;
-  /** The popup title label */
-  private title: Label;
 
   private logo: Sprite;
-  /** Button that closes the popup */
+  /** Button that start game and closes the popup */
   private startButton: Button;
+  /** Button that opens the Settings popup */
+  private settingsButton: Button;
   /** The panel background */
   private panelBase: RoundedBox;
 
@@ -32,26 +31,28 @@ export class StartGamePopup extends Container {
     this.panel = new Container();
     this.addChild(this.panel);
 
-    this.panelBase = new RoundedBox({ height: 500 });
+    this.panelBase = new RoundedBox({ height: 600 });
     this.panel.addChild(this.panelBase);
     this.logo = new Sprite({
       texture: Texture.from("tron-sweep-logo-main.png"),
       anchor: 0.5,
       scale: 0.2,
     });
-    this.logo.y = -100;
+    this.logo.y = -175;
     this.panel.addChild(this.logo);
-    this.title = new Label({
-      text: "Paused",
-      style: { fill: Colors.Cyan, fontSize: 50 },
-    });
-    this.title.y = -80;
-    // this.panel.addChild(this.title);
 
     this.startButton = new Button({ text: "Start Game" });
     this.startButton.y = 100;
     this.startButton.onPress.connect(() => engine().navigation.dismissPopup());
     this.panel.addChild(this.startButton);
+
+    this.settingsButton = new Button({ text: "Settings" });
+    this.settingsButton.y = 225;
+    this.settingsButton.onPress.connect(() => {
+      engine().navigation.dismissPopup();
+      engine().navigation.presentPopup(SettingsPopup);
+    });
+    this.panel.addChild(this.settingsButton);
   }
 
   /** Resize the popup, fired whenever window size changes */

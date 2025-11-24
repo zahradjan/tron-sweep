@@ -1,16 +1,18 @@
 import { animate } from "motion";
-import { Container, Graphics, Sprite } from "pixi.js";
+import { Container, Sprite } from "pixi.js";
 
 export enum CellType {
-  Diamond = "diamond",
-  Silver = "silver",
-  Bronze = "bronze",
+  Basic = "basic",
+  User = "user",
+  Clue = "clue",
+  Flynn = "flynn",
 }
 
-const colorMap = {
-  [CellType.Diamond]: 0x9ac5db,
-  [CellType.Silver]: 0xc0c0c0,
-  [CellType.Bronze]: 0xcd7f32,
+const cellSpritesMap = {
+  [CellType.Basic]: "tron-disc-100.png",
+  [CellType.User]: "tron-disc-200.png",
+  [CellType.Clue]: "tron-disc-500.png",
+  [CellType.Flynn]: "tron-disc-1000.png",
 };
 
 interface CellValue {
@@ -21,20 +23,32 @@ interface CellValue {
 
 export class Cell extends Container {
   private coverSprite?: Sprite;
-  //TODO: will be sprite when images are generated
-  private valueSprite?: Graphics;
+  private valueSprite?: Sprite;
   private value: CellValue;
   private cellSize: number;
   private isRevealed: boolean = false;
 
   private static readonly CELL_VALUES: Record<CellType, CellValue> = {
-    [CellType.Diamond]: {
-      type: CellType.Diamond,
-      price: 1000,
-      sprite: "diamond",
+    [CellType.Basic]: {
+      type: CellType.Basic,
+      price: 100,
+      sprite: cellSpritesMap[CellType.Basic],
     },
-    [CellType.Silver]: { type: CellType.Silver, price: 200, sprite: "silver" },
-    [CellType.Bronze]: { type: CellType.Bronze, price: 50, sprite: "bronze" },
+    [CellType.User]: {
+      type: CellType.User,
+      price: 200,
+      sprite: cellSpritesMap[CellType.User],
+    },
+    [CellType.Clue]: {
+      type: CellType.Clue,
+      price: 500,
+      sprite: cellSpritesMap[CellType.Clue],
+    },
+    [CellType.Flynn]: {
+      type: CellType.Flynn,
+      price: 1000,
+      sprite: cellSpritesMap[CellType.Flynn],
+    },
   };
 
   constructor(cellSize: number) {
@@ -43,14 +57,19 @@ export class Cell extends Container {
     this.cellSize = cellSize;
 
     this.value = this.getRandomValue();
-    this.valueSprite = new Graphics();
-    this.valueSprite.rect(0, 0, this.cellSize, this.cellSize);
-
-    this.valueSprite.fill({ color: colorMap[this.value.type] });
+    this.valueSprite = Sprite.from(cellSpritesMap[this.value.type]);
+    this.valueSprite.anchor.set(0.5);
+    this.valueSprite.width = this.cellSize - 35;
+    this.valueSprite.height = this.cellSize - 35;
+    this.valueSprite.x = this.cellSize / 2;
+    this.valueSprite.y = this.cellSize / 2;
     this.addChild(this.valueSprite);
     this.coverSprite = Sprite.from("tron-sweep-logo.png");
+    this.coverSprite.anchor.set(0.5);
     this.coverSprite.width = this.cellSize;
     this.coverSprite.height = this.cellSize;
+    this.coverSprite.x = this.cellSize / 2;
+    this.coverSprite.y = this.cellSize / 2;
     this.addChild(this.coverSprite);
   }
 
