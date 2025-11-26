@@ -6,12 +6,11 @@ import type {
 } from "pixi.js";
 import { Application, Assets, extensions, ResizePlugin } from "pixi.js";
 import "pixi.js/app";
-import FontFaceObserver from "fontfaceobserver";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore - This is a dynamically generated file by AssetPack
 import manifest from "../manifest.json";
-
+import FontFaceObserver from "fontfaceobserver";
 import { CreationAudioPlugin } from "./audio/AudioPlugin";
 import { CreationNavigationPlugin } from "./navigation/NavigationPlugin";
 import { CreationResizePlugin } from "./resize/ResizePlugin";
