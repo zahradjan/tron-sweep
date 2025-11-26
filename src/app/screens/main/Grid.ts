@@ -72,7 +72,20 @@ export class Grid extends Container {
     this.gridBorderLines.stroke({ color: borderColor, width: 2 });
   }
 
+  public reset() {
+    for (const cell of this.cells) {
+      this.removeChild(cell);
+    }
+    this.cells = [];
+
+    this.createGrid();
+  }
+
   public getCells(): Cell[] {
     return this.cells;
+  }
+
+  public getRevealedCells(): Cell[] {
+    return this.cells.filter((cell) => cell.getIsRevealed());
   }
 }

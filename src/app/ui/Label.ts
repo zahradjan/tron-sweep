@@ -2,8 +2,11 @@ import type { TextOptions, TextStyleOptions } from "pixi.js";
 import { Text } from "pixi.js";
 
 const defaultLabelStyle: Partial<TextStyleOptions> = {
-  fontFamily: "Arial Rounded MT Bold",
+  fontFamily: "TR2N",
   align: "center",
+  whiteSpace: "normal",
+  wordWrap: false,
+  padding: 100,
 };
 
 export type LabelOptions = typeof defaultLabelStyle;

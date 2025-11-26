@@ -1,13 +1,14 @@
 import { FancyButton } from "@pixi/ui";
-
 import { engine } from "../getEngine";
 
 import { Label } from "./Label";
 import { Colors } from "../utils/colors";
+import { animate } from "motion";
+import { Container } from "pixi.js";
 
 const defaultButtonOptions = {
   text: "",
-  width: 301,
+  width: 350,
   height: 112,
   fontSize: 28,
 };
@@ -31,9 +32,11 @@ export class Button extends FancyButton {
           fill: Colors.Cyan,
           align: "center",
           fontSize: opts.fontSize,
+          whiteSpace: "normal",
+          trim: true,
+          wordWrap: false,
         },
       }),
-      textOffset: { x: 0, y: -13 },
       defaultTextAnchor: 0.5,
       scale: 0.9,
       animations: {
@@ -61,6 +64,32 @@ export class Button extends FancyButton {
     this.onHover.connect(this.handleHover.bind(this));
   }
 
+  public disable() {
+    this.button.enabled = false;
+    animate(
+      this as unknown as Container,
+      {
+        alpha: 0.5,
+      },
+      {
+        duration: 0.4,
+        ease: "easeInOut",
+      }
+    );
+  }
+  public enable() {
+    this.button.enabled = true;
+    animate(
+      this as unknown as Container,
+      {
+        alpha: 1,
+      },
+      {
+        duration: 0.4,
+        ease: "easeInOut",
+      }
+    );
+  }
   private handleHover() {
     engine().audio.sfx.play("main/sounds/sfx-hover.wav");
   }

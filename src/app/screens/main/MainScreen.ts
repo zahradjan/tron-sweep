@@ -10,8 +10,9 @@ import { SettingsPopup } from "../../popups/SettingsPopup";
 import { Button } from "../../ui/Button";
 
 import { Grid } from "./Grid";
-import { randomInt } from "../../../engine/utils/random";
 import { StartGamePopup } from "../../popups/StartGamePopup";
+import { BalanceDisplay } from "./BalanceDisplay";
+import { GameEngine } from "../../game-engine/GameEngine";
 
 /** The screen that holds the app */
 export class MainScreen extends Container {
@@ -21,15 +22,17 @@ export class MainScreen extends Container {
   public mainContainer: Container;
   private pauseButton: FancyButton;
   private settingsButton: FancyButton;
-  private sweepButton: FancyButton;
+  private sweepButton: Button;
   private paused = false;
   private background: Sprite;
   private logo: Sprite;
   private grid: Grid;
+  private balanceDisplay: BalanceDisplay;
+
+  private gameEngine: GameEngine;
 
   constructor() {
     super();
-
     this.background = Sprite.from("tron-arena.png");
     this.background.anchor.set(0.5);
     this.addChild(this.background);
@@ -43,6 +46,10 @@ export class MainScreen extends Container {
 
     this.addChild(this.logo);
 
+    this.balanceDisplay = new BalanceDisplay();
+
+    this.addChild(this.balanceDisplay);
+
     this.grid = new Grid({
       rows: 5,
       cols: 4,
@@ -50,6 +57,8 @@ export class MainScreen extends Container {
     });
     this.grid.pivot.set(this.grid.width / 2, this.grid.height / 2);
     this.addChild(this.grid);
+
+    this.gameEngine = new GameEngine(this.grid, this.balanceDisplay);
 
     const buttonAnimations = {
       hover: {
@@ -91,27 +100,25 @@ export class MainScreen extends Container {
       width: 300,
       height: 115,
     });
+    this.addChild(this.sweepButton);
     this.sweepButton.onPress.connect(async () => {
       console.log("Clicked");
-      const availableCells = this.grid
-        .getCells()
-        .filter((cell) => !cell.getIsRevealed());
+      if (this.gameEngine.getIsGameOver()) return;
+      if (!this.gameEngine.hasEnoughBalance()) return;
 
-      if (!availableCells.length) {
-        console.log("All cells already revealed!");
-        return;
-      }
-      const numToReveal = randomInt(1, availableCells.length);
-      const cellsToReveal = availableCells.slice(
-        0,
-        Math.min(numToReveal, availableCells.length)
-      );
+      this.sweepButton.disable();
 
-      for (const cell of cellsToReveal) {
-        await cell.reveal();
-      }
+      this.gameEngine.subtractSweepCost();
+
+      await this.gameEngine.revealCells();
+
+      const winningResult = this.gameEngine.checkWinningCells();
+
+      this.gameEngine.setWinningCells(winningResult);
+      this.gameEngine.countWinScore(winningResult);
+
+      this.sweepButton.enable();
     });
-    this.addChild(this.sweepButton);
   }
 
   /** Prepare the screen just before showing */
@@ -156,12 +163,17 @@ export class MainScreen extends Container {
     this.pauseButton.y = 30;
     this.settingsButton.x = width - 30;
     this.settingsButton.y = 30;
-    this.sweepButton.x = width / 2;
-    this.sweepButton.y = height - 75;
     this.logo.x = width / 2;
     this.logo.y = 100;
     this.grid.x = width / 2;
     this.grid.y = height / 2;
+
+    this.balanceDisplay.x = width - 375;
+    this.balanceDisplay.y = height - 100;
+
+    this.sweepButton.x = width / 2;
+    //This is because on mobile balance display would be underneath sweep button
+    this.sweepButton.y = width < 800 ? height - 250 : height - 100;
   }
 
   /** Show screen with animations */
