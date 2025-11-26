@@ -44,6 +44,18 @@ export class BGM {
     );
   }
 
+  public pause() {
+    if (this.current) {
+      this.current.pause();
+    }
+  }
+
+  public resume() {
+    if (this.current) {
+      this.current.resume();
+    }
+  }
+
   /** Get background music volume */
   public getVolume() {
     return this.volume;

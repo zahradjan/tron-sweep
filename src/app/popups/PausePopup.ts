@@ -58,6 +58,8 @@ export class PausePopup extends Container {
   /** Present the popup, animated */
   public async show() {
     const currentEngine = engine();
+    engine().audio.bgm.pause();
+
     if (currentEngine.navigation.currentScreen) {
       currentEngine.navigation.currentScreen.filters = [
         new BlurFilter({ strength: 5 }),
@@ -76,6 +78,7 @@ export class PausePopup extends Container {
   /** Dismiss the popup, animated */
   public async hide() {
     const currentEngine = engine();
+    engine().audio.bgm.resume();
     if (currentEngine.navigation.currentScreen) {
       currentEngine.navigation.currentScreen.filters = [];
     }

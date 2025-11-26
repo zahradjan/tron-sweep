@@ -113,14 +113,33 @@ export class BalanceDisplay extends Container {
       this.balanceValue.text = `${winValue}`;
       return;
     }
-    await animate(current, winValue, {
-      duration: 2,
-      ease: "easeOut",
-      onUpdate: (latest) => {
-        this.winValue.text = `${Math.round(latest)}`;
-      },
-    }).finished;
-    this.winValue.text = `${winValue}`;
+    this.winValue.style.fill = Colors.Orange;
+    await Promise.all([
+      await animate(
+        this.winValue.scale,
+        { x: 1.4, y: 1.4 },
+        {
+          duration: 0.4,
+          ease: "anticipate",
+        }
+      ).finished,
+      await animate(current, winValue, {
+        duration: 2,
+        ease: "easeOut",
+        onUpdate: (latest) => {
+          this.winValue.text = `${Math.round(latest)}`;
+        },
+      }).finished,
+      await animate(
+        this.winValue.scale,
+        { x: 1, y: 1 },
+        {
+          duration: 0.4,
+          ease: "anticipate",
+        }
+      ).finished,
+    ]);
+    this.winValue.style.fill = Colors.Cyan;
     this.winValue.text = `${winValue}`;
   }
 

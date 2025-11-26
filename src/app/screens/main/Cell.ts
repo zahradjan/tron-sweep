@@ -112,8 +112,6 @@ export class Cell extends Container {
 
     this.isRevealed = true;
 
-    // Remove cover
-
     await this.revealValueSprite();
   }
 

@@ -8,4 +8,5 @@ export enum Colors {
   MediumGrey = 0x4a4a4a,
   White = 0xffffff,
   Black = 0x000000,
+  Orange = 0xf8893d,
 }

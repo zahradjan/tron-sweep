@@ -80,9 +80,9 @@ export class MainScreen extends Container {
       anchor: 0.5,
       animations: buttonAnimations,
     });
-    this.pauseButton.onPress.connect(() =>
-      engine().navigation.presentPopup(PausePopup)
-    );
+    this.pauseButton.onPress.connect(() => {
+      engine().navigation.presentPopup(PausePopup);
+    });
     this.addChild(this.pauseButton);
 
     this.settingsButton = new FancyButton({
@@ -114,8 +114,8 @@ export class MainScreen extends Container {
 
       const winningResult = this.gameEngine.checkWinningCells();
 
+      await this.gameEngine.countWinScore(winningResult);
       this.gameEngine.setWinningCells(winningResult);
-      this.gameEngine.countWinScore(winningResult);
 
       this.sweepButton.enable();
     });
