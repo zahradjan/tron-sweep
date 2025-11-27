@@ -1,6 +1,6 @@
 import { Container, Graphics } from "pixi.js";
 import { Colors } from "../../utils/colors";
-import { Cell } from "./Cell";
+import { Cell, CELL_VALUES, CellType, CellValue } from "./Cell";
 
 export interface GridOptions {
   rows: number;
@@ -36,7 +36,7 @@ export class Grid extends Container {
     const { rows, cols, cellSize, gap } = this.options;
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
-        const cell = new Cell(cellSize);
+        const cell = new Cell(cellSize, this.getRandomCellValue());
 
         // Position cell
         cell.x = col * (cellSize + gap) + gap / 2;
@@ -46,6 +46,13 @@ export class Grid extends Container {
         this.addChild(cell);
       }
     }
+  }
+
+  //TODO: this is not playable too random, there is a need for more controllable approach, this way is miserable probability user will loose game
+  public getRandomCellValue(): CellValue {
+    const types = Object.values(CellType);
+    const randomType = types[Math.floor(Math.random() * types.length)];
+    return CELL_VALUES[randomType];
   }
 
   private drawGridBorderLines() {

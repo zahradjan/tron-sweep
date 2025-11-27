@@ -62,9 +62,9 @@ export class GameEngine {
     if (winningResult.won) {
       let totalPrize = 0;
       const badgeCounts: Record<HighScoreBadge, number> = {
-        [HighScoreBadge.Double]: 2,
-        [HighScoreBadge.Triple]: 3,
-        [HighScoreBadge.Mega]: 1,
+        [HighScoreBadge.Double]: 0,
+        [HighScoreBadge.Triple]: 0,
+        [HighScoreBadge.Mega]: 0,
       };
       for (const win of winningResult.winningCells) {
         let basePrize = 0;
@@ -94,10 +94,14 @@ export class GameEngine {
         totalPrize += prize;
       }
 
+      await this.setWinningCells(winningResult);
+      await new Promise((resolve) => setTimeout(resolve, 200));
       await this.showHighScoreBadge(badgeCounts);
       this.win += totalPrize;
+      this.balance += this.win;
       console.log("Win: ", this.win);
-      this.balanceDisplay.setWinValue(this.win);
+      await this.balanceDisplay.setWinValue(this.win);
+      await this.balanceDisplay.setBalance(this.balance);
     }
   }
 
@@ -127,27 +131,31 @@ export class GameEngine {
       console.log("All cells already revealed!");
       return [];
     }
-    // const numToReveal = randomInt(1, availableCells.length);
-    // const cellsToReveal = availableCells.slice(
-    //   0,
-    //   Math.min(numToReveal, availableCells.length)
-    // );
-
     for (const cell of availableCells) {
       await cell.reveal();
     }
   }
 
-  public setWinningCells(winningCellsMap: WinningResult) {
+  public async setWinningCells(winningCellsMap: WinningResult) {
     const winningTypes = winningCellsMap.winningCells.map((win) => win.type);
     const revealedCells = this.grid.getRevealedCells();
-    for (const cell of revealedCells) {
+    const promises = revealedCells.map((cell) => {
       if (winningTypes.includes(cell.getType())) {
-        cell.setIsWinning(true);
+        return cell.setIsWinning(true);
       } else {
-        cell.setIsWinning(false);
+        return cell.setIsWinning(false);
       }
-    }
+    });
+
+    await Promise.all(promises);
+  }
+
+  public nextGame() {
+    this.grid.reset();
+    this.win = 0;
+    this.balanceDisplay.setWinValue(0, false);
+    this.balanceDisplay.setBalance(this.balance);
+    this.balanceDisplay.setSweepCost(this.SWEEP_COST);
   }
 
   public hasEnoughBalance() {
@@ -164,10 +172,6 @@ export class GameEngine {
     this.balanceDisplay.setBalance(this.balance);
   }
 
-  public getIsGameOver() {
-    return this.gameOver;
-  }
-
   private getHighScoreBadge(count: number): HighScoreBadge | null {
     if (count >= 6 && count < 9) {
       return HighScoreBadge.Double;
@@ -177,5 +181,17 @@ export class GameEngine {
       return HighScoreBadge.Mega;
     }
     return null;
+  }
+
+  public getIsGameOver() {
+    return this.gameOver;
+  }
+
+  public getWin() {
+    return this.win;
+  }
+
+  public getBalance() {
+    return this.balance;
   }
 }

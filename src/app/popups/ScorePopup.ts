@@ -48,11 +48,11 @@ export class ScorePopup extends Container {
       ];
     }
 
-    this.panel.pivot.y = -400;
+    this.panel.scale.set(0);
     await animate(
-      this.panel.pivot,
-      { y: 0 },
-      { duration: 0.3, ease: "backOut" }
+      this.panel.scale,
+      { y: 1, x: 1 },
+      { duration: 0.3, ease: "backIn" }
     );
   }
 
@@ -63,8 +63,8 @@ export class ScorePopup extends Container {
       currentEngine.navigation.currentScreen.filters = [];
     }
     await animate(
-      this.panel.pivot,
-      { y: -500 },
+      this.panel.scale,
+      { y: 0, x: 0 },
       { duration: 0.3, ease: "backIn" }
     );
   }

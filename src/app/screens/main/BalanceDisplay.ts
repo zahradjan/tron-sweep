@@ -107,17 +107,23 @@ export class BalanceDisplay extends Container {
   public getWinValue() {
     return this.winValue;
   }
-  public async setWinValue(winValue: number) {
+  public async setWinValue(winValue: number, isAnimated: boolean = true) {
     const current = parseInt(this.balanceValue.text.replace(/\D/g, "")) || 0;
     if (current === winValue) {
-      this.balanceValue.text = `${winValue}`;
+      this.winValue.text = `${winValue}`;
       return;
     }
+
+    if (!isAnimated) {
+      this.winValue.text = `${winValue}`;
+      return;
+    }
+
     this.winValue.style.fill = Colors.Orange;
     await Promise.all([
       await animate(
         this.winValue.scale,
-        { x: 1.4, y: 1.4 },
+        { x: 2, y: 2 },
         {
           duration: 0.4,
           ease: "anticipate",

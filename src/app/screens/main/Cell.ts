@@ -83,7 +83,7 @@ export class Cell extends Container {
   public getRandomValue(): CellValue {
     const types = Object.values(CellType);
     const randomType = types[Math.floor(Math.random() * types.length)];
-    return Cell.CELL_VALUES[randomType];
+    return CELL_VALUES[randomType];
   }
 
   // wont be used but have here as tutorial on how to make repeat animation
@@ -199,18 +199,5 @@ export class Cell extends Container {
 
     this.removeChild(trail);
     this.removeChild(this.coverSprite);
-  }
-
-  public setType(type: CellType) {
-    this.cellValue = Cell.CELL_VALUES[type];
-    this.valueSprite.texture = Sprite.from(this.cellValue.sprite!).texture;
-    // Optionally reset reveal state and sprite scale/alpha if needed
-    this.isRevealed = false;
-    this.isWinning = false;
-    this.valueSprite.scale.set(0, 0);
-    this.valueSprite.alpha = 1;
-    if (!this.children.includes(this.coverSprite)) {
-      this.addChild(this.coverSprite);
-    }
   }
 }

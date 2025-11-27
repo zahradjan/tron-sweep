@@ -13,6 +13,7 @@ import { Grid } from "./Grid";
 import { StartGamePopup } from "../../popups/StartGamePopup";
 import { BalanceDisplay } from "./BalanceDisplay";
 import { gameEngine } from "../../getGameEngine";
+import { GameOverPopup } from "../../popups/GameOverPopup";
 
 /** The screen that holds the app */
 export class MainScreen extends Container {
@@ -49,8 +50,8 @@ export class MainScreen extends Container {
     this.addChild(this.balanceDisplay);
 
     this.grid = new Grid({
-      rows: 5,
-      cols: 4,
+      rows: 4,
+      cols: 3,
       cellSize: 125,
     });
     this.grid.pivot.set(this.grid.width / 2, this.grid.height / 2);
@@ -112,12 +113,15 @@ export class MainScreen extends Container {
         await gameEngine().revealCells();
 
         const winningResult = gameEngine().checkWinningCells();
+        console.log("result", winningResult);
 
         await gameEngine().countWinScore(winningResult);
-        gameEngine().setWinningCells(winningResult);
       } catch (error) {
         console.error("Sweep operation failed:", error);
       } finally {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        creationEngine().navigation.presentPopup(GameOverPopup);
         this.sweepButton.enable();
       }
     });
