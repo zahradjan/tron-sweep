@@ -41,9 +41,7 @@ export class CreationEngine extends Application {
 
     await super.init(opts);
     const tr2n = new FontFaceObserver("TR2N");
-    await tr2n.load().then((font) => {
-      console.log(font);
-    });
+    await tr2n.load();
     // Append the application canvas to the document body
     document.getElementById("pixi-container")!.appendChild(this.canvas);
     // Add a visibility listener, so the app can pause sounds and screens

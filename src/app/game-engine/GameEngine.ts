@@ -4,7 +4,7 @@ import { BalanceDisplay } from "../screens/main/BalanceDisplay";
 import { CellType } from "../screens/main/Cell";
 import { Grid } from "../screens/main/Grid";
 
-export enum ScoreMultiplier {
+export enum HighScoreBadge {
   Double = "double",
   Triple = "triple",
   Mega = "mega",
@@ -61,6 +61,11 @@ export class GameEngine {
   public async countWinScore(winningResult: WinningResult) {
     if (winningResult.won) {
       let totalPrize = 0;
+      const badgeCounts: Record<HighScoreBadge, number> = {
+        [HighScoreBadge.Double]: 2,
+        [HighScoreBadge.Triple]: 3,
+        [HighScoreBadge.Mega]: 1,
+      };
       for (const win of winningResult.winningCells) {
         let basePrize = 0;
         switch (win.type) {
@@ -80,24 +85,36 @@ export class GameEngine {
             basePrize = 0;
         }
         const multiplier = win.count - 2;
+        const highScoreBadge = this.getHighScoreBadge(win.count);
+        if (highScoreBadge) {
+          badgeCounts[highScoreBadge]++;
+        }
+
         const prize = basePrize * multiplier;
         totalPrize += prize;
-        const scoreMultiplier = this.getScoreMultiplier(win.count);
-        console.log("Win count", multiplier);
-        if (scoreMultiplier) {
-          await creationEngine().navigation.presentPopup(ScorePopup);
-          console.log(creationEngine().navigation.currentPopup);
-          const scorePopup: ScorePopup = creationEngine().navigation
-            .currentPopup as ScorePopup;
-          scorePopup.setMultiplier(scoreMultiplier);
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-          await creationEngine().navigation.dismissPopup();
-          console.log(`${scoreMultiplier}!`);
-        }
       }
+
+      await this.showHighScoreBadge(badgeCounts);
       this.win += totalPrize;
       console.log("Win: ", this.win);
       this.balanceDisplay.setWinValue(this.win);
+    }
+  }
+
+  public async showHighScoreBadge(
+    highScoreBadge: Record<HighScoreBadge, number>
+  ) {
+    for (const badge of Object.values(HighScoreBadge)) {
+      const count = highScoreBadge[badge];
+      if (count > 0) {
+        await creationEngine().navigation.presentPopup(ScorePopup, {
+          badge,
+          count,
+        });
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        await creationEngine().navigation.dismissPopup();
+        console.log(`${badge}! x${count}`);
+      }
     }
   }
 
@@ -151,13 +168,13 @@ export class GameEngine {
     return this.gameOver;
   }
 
-  private getScoreMultiplier(count: number): ScoreMultiplier | null {
+  private getHighScoreBadge(count: number): HighScoreBadge | null {
     if (count >= 6 && count < 9) {
-      return ScoreMultiplier.Double;
+      return HighScoreBadge.Double;
     } else if (count >= 9 && count < 12) {
-      return ScoreMultiplier.Triple;
+      return HighScoreBadge.Triple;
     } else if (count >= 12) {
-      return ScoreMultiplier.Mega;
+      return HighScoreBadge.Mega;
     }
     return null;
   }

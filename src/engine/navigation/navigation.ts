@@ -31,7 +31,7 @@ interface AppScreen extends Container {
 
 /** Interface for app screens constructors */
 interface AppScreenConstructor {
-  new (): AppScreen;
+  new (props?: any): AppScreen;
   /** List of assets bundles required by the screen */
   assetBundles?: string[];
 }
@@ -174,11 +174,11 @@ export class Navigation {
     this.currentPopup?.resize?.(width, height);
     this.background?.resize?.(width, height);
   }
-
+  //TODO: wont be using any so generic this
   /**
    * Show up a popup over current screen
    */
-  public async presentPopup(ctor: AppScreenConstructor) {
+  public async presentPopup(ctor: AppScreenConstructor, props?: any) {
     if (this.currentScreen) {
       this.currentScreen.interactiveChildren = false;
       await this.currentScreen.pause?.();
@@ -188,7 +188,7 @@ export class Navigation {
       await this.hideAndRemoveScreen(this.currentPopup);
     }
 
-    this.currentPopup = new ctor();
+    this.currentPopup = new ctor(props);
     await this.addAndShowScreen(this.currentPopup);
   }
 

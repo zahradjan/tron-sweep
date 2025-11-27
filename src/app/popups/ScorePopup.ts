@@ -2,51 +2,39 @@ import { animate } from "motion";
 import { BlurFilter, Container, Sprite, Texture } from "pixi.js";
 
 import { creationEngine } from "../getCreationEngine";
-import { ScoreMultiplier } from "../game-engine/GameEngine";
+import { HighScoreBadge } from "../game-engine/GameEngine";
+import { Label } from "../ui/Label";
+import { Colors } from "../utils/colors";
 
 export class ScorePopup extends Container {
-  /** The dark semi-transparent background covering current screen */
-  private bg: Sprite;
   /** Container for the popup UI components */
   private panel: Container;
 
-  private scoreImage: Sprite;
+  private highScoreBadgeImage: Sprite | null = null;
 
-  private multiplier: ScoreMultiplier | null = null;
+  private highScoreBadge: HighScoreBadge | null = null;
 
-  private multiplierSprite: Record<ScoreMultiplier, string> = {
-    [ScoreMultiplier.Double]: "tron-double.png",
-    [ScoreMultiplier.Triple]: "tron-triple.png",
-    [ScoreMultiplier.Mega]: "tron-mega.png",
+  private multipleSameHighScoreBadgeLabel?: Label;
+
+  private highScoreBadgeSprite: Record<HighScoreBadge, string> = {
+    [HighScoreBadge.Double]: "tron-double.png",
+    [HighScoreBadge.Triple]: "tron-triple.png",
+    [HighScoreBadge.Mega]: "tron-mega.png",
   };
 
-  constructor() {
+  constructor(props?: { badge: HighScoreBadge; count: number }) {
     super();
-
-    this.bg = new Sprite(Texture.WHITE);
-    this.bg.tint = 0x0;
-    this.bg.interactive = true;
-    this.addChild(this.bg);
 
     this.panel = new Container();
     this.addChild(this.panel);
-
-    this.scoreImage = new Sprite({
-      texture: Texture.from(
-        this.multiplierSprite[this.multiplier ?? ScoreMultiplier.Double]
-      ),
-      anchor: 0.5,
-      scale: 0.5,
-    });
-    this.scoreImage.y = 0;
-
-    this.panel.addChild(this.scoreImage);
+    console.log("props", props);
+    if (props) {
+      this.setHighScoreBadge(props.badge, props.count);
+    }
   }
 
   /** Resize the popup, fired whenever window size changes */
   public resize(width: number, height: number) {
-    this.bg.width = width;
-    this.bg.height = height;
     this.panel.x = width * 0.5;
     this.panel.y = height * 0.5;
   }
@@ -59,9 +47,8 @@ export class ScorePopup extends Container {
         new BlurFilter({ strength: 5 }),
       ];
     }
-    this.bg.alpha = 0;
+
     this.panel.pivot.y = -400;
-    animate(this.bg, { alpha: 0.8 }, { duration: 0.2, ease: "linear" });
     await animate(
       this.panel.pivot,
       { y: 0 },
@@ -75,7 +62,6 @@ export class ScorePopup extends Container {
     if (currentEngine.navigation.currentScreen) {
       currentEngine.navigation.currentScreen.filters = [];
     }
-    animate(this.bg, { alpha: 0 }, { duration: 0.2, ease: "linear" });
     await animate(
       this.panel.pivot,
       { y: -500 },
@@ -83,7 +69,39 @@ export class ScorePopup extends Container {
     );
   }
 
-  public setMultiplier(mult: ScoreMultiplier) {
-    this.multiplier = mult;
+  public setHighScoreBadge(badge: HighScoreBadge, count: number) {
+    // Get the badge and count from the object
+
+    console.log("badge", badge);
+    console.log("count", count);
+    this.highScoreBadge = badge;
+    console.log("highScoreBadge", this.highScoreBadge);
+
+    this.highScoreBadgeImage = new Sprite({
+      texture: Texture.from(
+        this.highScoreBadgeSprite[this.highScoreBadge ?? HighScoreBadge.Double]
+      ),
+      anchor: 0.5,
+      scale: 0.5,
+    });
+    this.highScoreBadgeImage.y = 0;
+
+    this.panel.addChild(this.highScoreBadgeImage);
+
+    if (count > 1) {
+      this.multipleSameHighScoreBadgeLabel = new Label({
+        text: `x${count}`,
+        style: {
+          fill: Colors.Cyan,
+          fontSize: 45,
+          align: "center",
+        },
+      });
+      this.multipleSameHighScoreBadgeLabel.anchor.set(0.5, 0); // Center below the badge
+      this.multipleSameHighScoreBadgeLabel.x = this.highScoreBadgeImage.x;
+      this.multipleSameHighScoreBadgeLabel.y =
+        this.highScoreBadgeImage.y + this.highScoreBadgeImage.height / 2 - 50;
+      this.panel.addChild(this.multipleSameHighScoreBadgeLabel);
+    }
   }
 }

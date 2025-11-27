@@ -16,7 +16,30 @@ const cellSpritesMap = {
   [CellType.Flynn]: "tron-disc-1000.png",
 };
 
-interface CellValue {
+export const CELL_VALUES: Record<CellType, CellValue> = {
+  [CellType.Program]: {
+    type: CellType.Program,
+    price: 100,
+    sprite: cellSpritesMap[CellType.Program],
+  },
+  [CellType.User]: {
+    type: CellType.User,
+    price: 200,
+    sprite: cellSpritesMap[CellType.User],
+  },
+  [CellType.Clue]: {
+    type: CellType.Clue,
+    price: 500,
+    sprite: cellSpritesMap[CellType.Clue],
+  },
+  [CellType.Flynn]: {
+    type: CellType.Flynn,
+    price: 1000,
+    sprite: cellSpritesMap[CellType.Flynn],
+  },
+};
+
+export interface CellValue {
   type: CellType;
   price: number;
   sprite?: string;
@@ -25,38 +48,16 @@ interface CellValue {
 export class Cell extends Container {
   private coverSprite: Sprite;
   private valueSprite: Sprite;
-  private value: CellValue;
+  private cellValue: CellValue;
   private cellSize: number;
   private isRevealed: boolean = false;
   private isWinning: boolean = false;
 
-  private static readonly CELL_VALUES: Record<CellType, CellValue> = {
-    [CellType.Program]: {
-      type: CellType.Program,
-      price: 100,
-      sprite: cellSpritesMap[CellType.Program],
-    },
-    [CellType.User]: {
-      type: CellType.User,
-      price: 200,
-      sprite: cellSpritesMap[CellType.User],
-    },
-    [CellType.Clue]: {
-      type: CellType.Clue,
-      price: 500,
-      sprite: cellSpritesMap[CellType.Clue],
-    },
-    [CellType.Flynn]: {
-      type: CellType.Flynn,
-      price: 1000,
-      sprite: cellSpritesMap[CellType.Flynn],
-    },
-  };
-
-  constructor(cellSize: number) {
+  constructor(cellSize: number, cellValue: CellValue) {
     super();
 
     this.cellSize = cellSize;
+    this.cellValue = cellValue;
 
     this.coverSprite = Sprite.from("tron-disc.png");
 
@@ -70,8 +71,7 @@ export class Cell extends Container {
 
     this.addChild(this.coverSprite);
 
-    this.value = this.getRandomValue();
-    this.valueSprite = Sprite.from(cellSpritesMap[this.value.type]);
+    this.valueSprite = Sprite.from(cellSpritesMap[this.cellValue.type]);
     this.valueSprite.anchor.set(0.5);
 
     this.valueSprite.x = this.cellSize / 2;
@@ -80,7 +80,7 @@ export class Cell extends Container {
     this.addChild(this.valueSprite);
   }
 
-  private getRandomValue(): CellValue {
+  public getRandomValue(): CellValue {
     const types = Object.values(CellType);
     const randomType = types[Math.floor(Math.random() * types.length)];
     return Cell.CELL_VALUES[randomType];
@@ -116,11 +116,11 @@ export class Cell extends Container {
   }
 
   public getValue(): number {
-    return this.value.price;
+    return this.cellValue.price;
   }
 
   public getType(): CellType {
-    return this.value.type;
+    return this.cellValue.type;
   }
 
   public getIsRevealed(): boolean {
@@ -180,7 +180,7 @@ export class Cell extends Container {
     trail.x = this.cellSize;
 
     await Promise.all([
-      animate(trail.scale, { x: 0 }, { duration: 0.4, ease: "circOut" })
+      animate(trail.scale, { x: 0 }, { duration: 0.2, ease: "circOut" })
         .finished,
       animate(
         this.coverSprite,
@@ -199,5 +199,18 @@ export class Cell extends Container {
 
     this.removeChild(trail);
     this.removeChild(this.coverSprite);
+  }
+
+  public setType(type: CellType) {
+    this.cellValue = Cell.CELL_VALUES[type];
+    this.valueSprite.texture = Sprite.from(this.cellValue.sprite!).texture;
+    // Optionally reset reveal state and sprite scale/alpha if needed
+    this.isRevealed = false;
+    this.isWinning = false;
+    this.valueSprite.scale.set(0, 0);
+    this.valueSprite.alpha = 1;
+    if (!this.children.includes(this.coverSprite)) {
+      this.addChild(this.coverSprite);
+    }
   }
 }
