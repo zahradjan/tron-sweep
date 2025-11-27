@@ -1,7 +1,7 @@
 import { animate } from "motion";
 import { BlurFilter, Container, Sprite, Texture } from "pixi.js";
 
-import { engine } from "../getEngine";
+import { creationEngine } from "../getCreationEngine";
 import { ScoreMultiplier } from "../game-engine/GameEngine";
 
 export class ScorePopup extends Container {
@@ -53,7 +53,7 @@ export class ScorePopup extends Container {
 
   /** Present the popup, animated */
   public async show() {
-    const currentEngine = engine();
+    const currentEngine = creationEngine();
     if (currentEngine.navigation.currentScreen) {
       currentEngine.navigation.currentScreen.filters = [
         new BlurFilter({ strength: 5 }),
@@ -71,7 +71,7 @@ export class ScorePopup extends Container {
 
   /** Dismiss the popup, animated */
   public async hide() {
-    const currentEngine = engine();
+    const currentEngine = creationEngine();
     if (currentEngine.navigation.currentScreen) {
       currentEngine.navigation.currentScreen.filters = [];
     }

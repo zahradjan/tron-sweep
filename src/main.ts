@@ -1,5 +1,5 @@
 import { Application } from "pixi.js";
-import { setEngine } from "./app/getEngine";
+import { setCreationEngine } from "./app/getCreationEngine";
 import { LoadScreen } from "./app/screens/LoadScreen";
 import { MainScreen } from "./app/screens/main/MainScreen";
 import { userSettings } from "./app/utils/userSettings";
@@ -14,15 +14,19 @@ declare global {
  */
 import "@pixi/sound";
 import { Colors } from "./app/utils/colors";
+import { GameEngine } from "./app/game-engine/GameEngine";
+import { setGameEngine } from "./app/getGameEngine";
 // import "@esotericsoftware/spine-pixi-v8";
 
 // Create a new creation engine instance
-const engine = new CreationEngine();
-setEngine(engine);
+const creationEngine = new CreationEngine();
+setCreationEngine(creationEngine);
+const gameEngine = new GameEngine();
+setGameEngine(gameEngine);
 
 (async () => {
   // Initialize the creation engine instance
-  await engine.init({
+  await creationEngine.init({
     background: Colors.Tarawera,
     resizeOptions: { minWidth: 768, minHeight: 1024, letterbox: false },
   });
@@ -30,9 +34,9 @@ setEngine(engine);
   // Initialize the user settings
   userSettings.init();
 
-  globalThis.__PIXI_APP__ = engine;
+  globalThis.__PIXI_APP__ = creationEngine;
   // Show the load screen
-  await engine.navigation.showScreen(LoadScreen);
+  await creationEngine.navigation.showScreen(LoadScreen);
   // Show the main screen once the load screen is dismissed
-  await engine.navigation.showScreen(MainScreen);
+  await creationEngine.navigation.showScreen(MainScreen);
 })();

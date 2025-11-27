@@ -1,4 +1,4 @@
-import { engine } from "../getEngine";
+import { creationEngine } from "../getCreationEngine";
 import { ScorePopup } from "../popups/ScorePopup";
 import { BalanceDisplay } from "../screens/main/BalanceDisplay";
 import { CellType } from "../screens/main/Cell";
@@ -25,11 +25,14 @@ export class GameEngine {
   private balance: number = 800;
   private readonly SWEEP_COST = 100;
   private gameOver: boolean = false;
+  private grid!: Grid;
+  private balanceDisplay!: BalanceDisplay;
 
-  constructor(
-    private grid: Grid,
-    private balanceDisplay: BalanceDisplay
-  ) {
+  constructor() {}
+
+  public init(grid: Grid, balanceDisplay: BalanceDisplay) {
+    this.grid = grid;
+    this.balanceDisplay = balanceDisplay;
     this.balanceDisplay.setBalance(this.balance);
     this.balanceDisplay.setSweepCost(this.SWEEP_COST);
     this.balanceDisplay.setWinValue(0);
@@ -82,13 +85,13 @@ export class GameEngine {
         const scoreMultiplier = this.getScoreMultiplier(win.count);
         console.log("Win count", multiplier);
         if (scoreMultiplier) {
-          await engine().navigation.presentPopup(ScorePopup);
-          console.log(engine().navigation.currentPopup);
-          const scorePopup: ScorePopup = engine().navigation
+          await creationEngine().navigation.presentPopup(ScorePopup);
+          console.log(creationEngine().navigation.currentPopup);
+          const scorePopup: ScorePopup = creationEngine().navigation
             .currentPopup as ScorePopup;
           scorePopup.setMultiplier(scoreMultiplier);
           await new Promise((resolve) => setTimeout(resolve, 2000));
-          await engine().navigation.dismissPopup();
+          await creationEngine().navigation.dismissPopup();
           console.log(`${scoreMultiplier}!`);
         }
       }

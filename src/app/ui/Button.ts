@@ -1,5 +1,5 @@
 import { FancyButton } from "@pixi/ui";
-import { engine } from "../getEngine";
+import { creationEngine } from "../getCreationEngine";
 
 import { Label } from "./Label";
 import { Colors } from "../utils/colors";
@@ -91,10 +91,10 @@ export class Button extends FancyButton {
     );
   }
   private handleHover() {
-    engine().audio.sfx.play("main/sounds/sfx-hover.wav");
+    creationEngine().audio.sfx.play("main/sounds/sfx-hover.wav");
   }
 
   private handleDown() {
-    engine().audio.sfx.play("main/sounds/sfx-press.wav");
+    creationEngine().audio.sfx.play("main/sounds/sfx-press.wav");
   }
 }

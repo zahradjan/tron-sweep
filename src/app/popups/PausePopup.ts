@@ -1,7 +1,7 @@
 import { animate } from "motion";
 import { BlurFilter, Container, Sprite, Texture } from "pixi.js";
 
-import { engine } from "../getEngine";
+import { creationEngine } from "../getCreationEngine";
 import { Button } from "../ui/Button";
 import { Label } from "../ui/Label";
 import { RoundedBox } from "../ui/RoundedBox";
@@ -43,7 +43,9 @@ export class PausePopup extends Container {
 
     this.doneButton = new Button({ text: "Resume" });
     this.doneButton.y = 70;
-    this.doneButton.onPress.connect(() => engine().navigation.dismissPopup());
+    this.doneButton.onPress.connect(() =>
+      creationEngine().navigation.dismissPopup()
+    );
     this.panel.addChild(this.doneButton);
   }
 
@@ -57,8 +59,8 @@ export class PausePopup extends Container {
 
   /** Present the popup, animated */
   public async show() {
-    const currentEngine = engine();
-    engine().audio.bgm.pause();
+    const currentEngine = creationEngine();
+    creationEngine().audio.bgm.pause();
 
     if (currentEngine.navigation.currentScreen) {
       currentEngine.navigation.currentScreen.filters = [
@@ -77,8 +79,8 @@ export class PausePopup extends Container {
 
   /** Dismiss the popup, animated */
   public async hide() {
-    const currentEngine = engine();
-    engine().audio.bgm.resume();
+    const currentEngine = creationEngine();
+    creationEngine().audio.bgm.resume();
     if (currentEngine.navigation.currentScreen) {
       currentEngine.navigation.currentScreen.filters = [];
     }

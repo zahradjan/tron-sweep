@@ -4,7 +4,7 @@ import type { AnimationPlaybackControls } from "motion/react";
 import type { Ticker } from "pixi.js";
 import { Container, Sprite, Texture } from "pixi.js";
 
-import { engine } from "../../getEngine";
+import { creationEngine } from "../../getCreationEngine";
 import { PausePopup } from "../../popups/PausePopup";
 import { SettingsPopup } from "../../popups/SettingsPopup";
 import { Button } from "../../ui/Button";
@@ -12,7 +12,7 @@ import { Button } from "../../ui/Button";
 import { Grid } from "./Grid";
 import { StartGamePopup } from "../../popups/StartGamePopup";
 import { BalanceDisplay } from "./BalanceDisplay";
-import { GameEngine } from "../../game-engine/GameEngine";
+import { gameEngine } from "../../getGameEngine";
 
 /** The screen that holds the app */
 export class MainScreen extends Container {
@@ -28,8 +28,6 @@ export class MainScreen extends Container {
   private logo: Sprite;
   private grid: Grid;
   private balanceDisplay: BalanceDisplay;
-
-  private gameEngine: GameEngine;
 
   constructor() {
     super();
@@ -58,7 +56,7 @@ export class MainScreen extends Container {
     this.grid.pivot.set(this.grid.width / 2, this.grid.height / 2);
     this.addChild(this.grid);
 
-    this.gameEngine = new GameEngine(this.grid, this.balanceDisplay);
+    gameEngine().init(this.grid, this.balanceDisplay);
 
     const buttonAnimations = {
       hover: {
@@ -81,7 +79,7 @@ export class MainScreen extends Container {
       animations: buttonAnimations,
     });
     this.pauseButton.onPress.connect(() => {
-      engine().navigation.presentPopup(PausePopup);
+      creationEngine().navigation.presentPopup(PausePopup);
     });
     this.addChild(this.pauseButton);
 
@@ -91,7 +89,7 @@ export class MainScreen extends Container {
       animations: buttonAnimations,
     });
     this.settingsButton.onPress.connect(() =>
-      engine().navigation.presentPopup(SettingsPopup)
+      creationEngine().navigation.presentPopup(SettingsPopup)
     );
     this.addChild(this.settingsButton);
 
@@ -103,19 +101,19 @@ export class MainScreen extends Container {
     this.addChild(this.sweepButton);
     this.sweepButton.onPress.connect(async () => {
       console.log("Clicked");
-      if (this.gameEngine.getIsGameOver()) return;
-      if (!this.gameEngine.hasEnoughBalance()) return;
+      if (gameEngine().getIsGameOver()) return;
+      if (!gameEngine().hasEnoughBalance()) return;
 
       this.sweepButton.disable();
 
-      this.gameEngine.subtractSweepCost();
+      gameEngine().subtractSweepCost();
 
-      await this.gameEngine.revealCells();
+      await gameEngine().revealCells();
 
-      const winningResult = this.gameEngine.checkWinningCells();
+      const winningResult = gameEngine().checkWinningCells();
 
-      await this.gameEngine.countWinScore(winningResult);
-      this.gameEngine.setWinningCells(winningResult);
+      await gameEngine().countWinScore(winningResult);
+      gameEngine().setWinningCells(winningResult);
 
       this.sweepButton.enable();
     });
@@ -178,8 +176,8 @@ export class MainScreen extends Container {
 
   /** Show screen with animations */
   public async show(): Promise<void> {
-    engine().navigation.presentPopup(StartGamePopup);
-    engine().audio.bgm.play("main/sounds/tron-legacy-end-of-line.mp3", {
+    creationEngine().navigation.presentPopup(StartGamePopup);
+    creationEngine().audio.bgm.play("main/sounds/tron-legacy-end-of-line.mp3", {
       volume: 0.8,
     });
 
@@ -207,8 +205,8 @@ export class MainScreen extends Container {
 
   /** Auto pause the app when window go out of focus */
   public blur() {
-    if (!engine().navigation.currentPopup) {
-      engine().navigation.presentPopup(PausePopup);
+    if (!creationEngine().navigation.currentPopup) {
+      creationEngine().navigation.presentPopup(PausePopup);
     }
   }
 }

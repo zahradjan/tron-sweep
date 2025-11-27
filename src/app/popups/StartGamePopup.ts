@@ -1,7 +1,7 @@
 import { animate } from "motion";
 import { BlurFilter, Container, Sprite, Texture } from "pixi.js";
 
-import { engine } from "../getEngine";
+import { creationEngine } from "../getCreationEngine";
 import { Button } from "../ui/Button";
 import { RoundedBox } from "../ui/RoundedBox";
 import { SettingsPopup } from "./SettingsPopup";
@@ -43,14 +43,16 @@ export class StartGamePopup extends Container {
 
     this.startButton = new Button({ text: "Start Game" });
     this.startButton.y = 100;
-    this.startButton.onPress.connect(() => engine().navigation.dismissPopup());
+    this.startButton.onPress.connect(() =>
+      creationEngine().navigation.dismissPopup()
+    );
     this.panel.addChild(this.startButton);
 
     this.settingsButton = new Button({ text: "Settings" });
     this.settingsButton.y = 225;
     this.settingsButton.onPress.connect(() => {
-      engine().navigation.dismissPopup();
-      engine().navigation.presentPopup(SettingsPopup);
+      creationEngine().navigation.dismissPopup();
+      creationEngine().navigation.presentPopup(SettingsPopup);
     });
     this.panel.addChild(this.settingsButton);
   }
@@ -65,7 +67,7 @@ export class StartGamePopup extends Container {
 
   /** Present the popup, animated */
   public async show() {
-    const currentEngine = engine();
+    const currentEngine = creationEngine();
     if (currentEngine.navigation.currentScreen) {
       currentEngine.navigation.currentScreen.filters = [
         new BlurFilter({ strength: 5 }),
@@ -83,7 +85,7 @@ export class StartGamePopup extends Container {
 
   /** Dismiss the popup, animated */
   public async hide() {
-    const currentEngine = engine();
+    const currentEngine = creationEngine();
     if (currentEngine.navigation.currentScreen) {
       currentEngine.navigation.currentScreen.filters = [];
     }

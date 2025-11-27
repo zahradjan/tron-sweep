@@ -3,7 +3,7 @@ import { animate } from "motion";
 import type { Text } from "pixi.js";
 import { BlurFilter, Container, Sprite, Texture } from "pixi.js";
 
-import { engine } from "../getEngine";
+import { creationEngine } from "../getCreationEngine";
 import { Button } from "../ui/Button";
 import { Label } from "../ui/Label";
 import { RoundedBox } from "../ui/RoundedBox";
@@ -60,7 +60,9 @@ export class SettingsPopup extends Container {
 
     this.doneButton = new Button({ text: "OK" });
     this.doneButton.y = this.panelBase.boxHeight * 0.5 - 78;
-    this.doneButton.onPress.connect(() => engine().navigation.dismissPopup());
+    this.doneButton.onPress.connect(() =>
+      creationEngine().navigation.dismissPopup()
+    );
     this.panel.addChild(this.doneButton);
 
     this.versionLabel = new Label({
@@ -115,7 +117,7 @@ export class SettingsPopup extends Container {
 
   /** Present the popup, animated */
   public async show() {
-    const currentEngine = engine();
+    const currentEngine = creationEngine();
     if (currentEngine.navigation.currentScreen) {
       currentEngine.navigation.currentScreen.filters = [
         new BlurFilter({ strength: 4 }),
@@ -134,7 +136,7 @@ export class SettingsPopup extends Container {
 
   /** Dismiss the popup, animated */
   public async hide() {
-    const currentEngine = engine();
+    const currentEngine = creationEngine();
     if (currentEngine.navigation.currentScreen) {
       currentEngine.navigation.currentScreen.filters = [];
     }
