@@ -1,6 +1,5 @@
 import { animate } from "motion";
 import { Container, Sprite } from "pixi.js";
-import { randomFloat } from "../../../engine/utils/random";
 
 export enum CellType {
   Program = "program",
@@ -87,25 +86,25 @@ export class Cell extends Container {
   }
 
   // wont be used but have here as tutorial on how to make repeat animation
-  private discFloat() {
-    animate(
-      this.coverSprite,
-      {
-        y: [
-          this.cellSize / 2,
-          this.cellSize / 2 - randomFloat(0, 10),
-          this.cellSize / 2,
-          this.cellSize / 2 - randomFloat(0, 10),
-          this.cellSize / 2,
-        ],
-      },
-      {
-        duration: 10,
-        repeat: Infinity,
-        ease: "easeInOut",
-      }
-    );
-  }
+  // private discFloat() {
+  //   animate(
+  //     this.coverSprite,
+  //     {
+  //       y: [
+  //         this.cellSize / 2,
+  //         this.cellSize / 2 - randomFloat(0, 10),
+  //         this.cellSize / 2,
+  //         this.cellSize / 2 - randomFloat(0, 10),
+  //         this.cellSize / 2,
+  //       ],
+  //     },
+  //     {
+  //       duration: 10,
+  //       repeat: Infinity,
+  //       ease: "easeInOut",
+  //     }
+  //   );
+  // }
 
   public async reveal() {
     if (this.isRevealed) return;

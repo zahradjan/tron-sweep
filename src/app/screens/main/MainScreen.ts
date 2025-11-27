@@ -10,9 +10,10 @@ import { SettingsPopup } from "../../popups/SettingsPopup";
 import { Button } from "../../ui/Button";
 
 import { Grid } from "./Grid";
-import { StartGamePopup } from "../../popups/StartGamePopup";
 import { BalanceDisplay } from "./BalanceDisplay";
 import { gameEngine } from "../../getGameEngine";
+import { DisclaimerPopup } from "../../popups/DisclaimerPopup";
+import { TutorialPopup } from "../../popups/TutorialPopup";
 import { GameOverPopup } from "../../popups/GameOverPopup";
 
 /** The screen that holds the app */
@@ -50,8 +51,8 @@ export class MainScreen extends Container {
     this.addChild(this.balanceDisplay);
 
     this.grid = new Grid({
-      rows: 4,
-      cols: 3,
+      rows: 5,
+      cols: 5,
       cellSize: 125,
     });
     this.grid.pivot.set(this.grid.width / 2, this.grid.height / 2);
@@ -184,7 +185,8 @@ export class MainScreen extends Container {
 
   /** Show screen with animations */
   public async show(): Promise<void> {
-    creationEngine().navigation.presentPopup(StartGamePopup);
+    await creationEngine().navigation.presentPopup(DisclaimerPopup);
+    creationEngine().navigation.presentPopup(TutorialPopup);
     creationEngine().audio.bgm.play("main/sounds/tron-legacy-end-of-line.mp3", {
       volume: 0.8,
     });

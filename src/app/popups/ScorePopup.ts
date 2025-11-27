@@ -97,7 +97,7 @@ export class ScorePopup extends Container {
           align: "center",
         },
       });
-      this.multipleSameHighScoreBadgeLabel.anchor.set(0.5, 0); // Center below the badge
+      this.multipleSameHighScoreBadgeLabel.anchor.set(0.5, 0);
       this.multipleSameHighScoreBadgeLabel.x = this.highScoreBadgeImage.x;
       this.multipleSameHighScoreBadgeLabel.y =
         this.highScoreBadgeImage.y + this.highScoreBadgeImage.height / 2 - 50;

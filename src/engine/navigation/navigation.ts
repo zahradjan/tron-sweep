@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Ticker } from "pixi.js";
 import { Assets, BigPool, Container } from "pixi.js";
 
