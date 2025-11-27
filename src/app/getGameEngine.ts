@@ -7,7 +7,10 @@ let instance: GameEngine | null = null;
  * This is a simple way to access the engine instance from anywhere in the app
  */
 export function gameEngine(): GameEngine {
-  return instance!;
+  if (instance === null) {
+    throw new Error("GameEngine not initialized. Call setGameEngine() first.");
+  }
+  return instance;
 }
 
 export function setGameEngine(app: GameEngine) {

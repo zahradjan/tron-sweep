@@ -82,7 +82,7 @@ export class BalanceDisplay extends Container {
     this.panel.x = width * 0.5;
     this.panel.y = height * 0.5;
     this.balanceValue.x = this.balanceLabel.x + this.balanceLabel.width;
-    this.winValue.x = this.winValue.x + this.winValue.width;
+    this.winValue.x = this.winLabel.x + this.winLabel.width + 20;
   }
 
   public getBalance() {

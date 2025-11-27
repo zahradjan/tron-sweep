@@ -106,16 +106,20 @@ export class MainScreen extends Container {
 
       this.sweepButton.disable();
 
-      gameEngine().subtractSweepCost();
+      try {
+        gameEngine().subtractSweepCost();
 
-      await gameEngine().revealCells();
+        await gameEngine().revealCells();
 
-      const winningResult = gameEngine().checkWinningCells();
+        const winningResult = gameEngine().checkWinningCells();
 
-      await gameEngine().countWinScore(winningResult);
-      gameEngine().setWinningCells(winningResult);
-
-      this.sweepButton.enable();
+        await gameEngine().countWinScore(winningResult);
+        gameEngine().setWinningCells(winningResult);
+      } catch (error) {
+        console.error("Sweep operation failed:", error);
+      } finally {
+        this.sweepButton.enable();
+      }
     });
   }
 

@@ -7,7 +7,12 @@ let instance: CreationEngine | null = null;
  * This is a simple way to access the engine instance from anywhere in the app
  */
 export function creationEngine(): CreationEngine {
-  return instance!;
+  if (instance === null) {
+    throw new Error(
+      "CreationEngine not initialized. Call setCreationEngine() before accessing the engine."
+    );
+  }
+  return instance;
 }
 
 export function setCreationEngine(app: CreationEngine) {
