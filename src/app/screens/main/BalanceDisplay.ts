@@ -144,7 +144,7 @@ export class BalanceDisplay extends Container {
     return this.winValue;
   }
   public async setWinValue(winValue: number, isAnimated: boolean = true) {
-    const current = parseInt(this.balanceValue.text.replace(/\D/g, "")) || 0;
+    const current = parseInt(this.winValue.text.replace(/\D/g, "")) || 0;
     if (current === winValue) {
       this.winValue.text = `${winValue}`;
       return;
