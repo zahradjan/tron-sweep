@@ -22,8 +22,8 @@ interface WinningCell {
 
 export class GameEngine {
   private win: number = 0;
-  private balance: number = 800;
-  private readonly SWEEP_COST = 100;
+  private balance: number = 2000;
+  private readonly SWEEP_COST = 1000;
   private gameOver: boolean = false;
   private grid!: Grid;
   private balanceDisplay!: BalanceDisplay;
@@ -51,7 +51,7 @@ export class GameEngine {
     }
     const winningCells: WinningCell[] = [];
     for (const [type, count] of typeCounts.entries()) {
-      if (count >= 3) {
+      if (count >= 5) {
         winningCells.push({ type, count });
       }
     }
@@ -70,16 +70,16 @@ export class GameEngine {
         let basePrize = 0;
         switch (win.type) {
           case CellType.Program:
-            basePrize = 200;
+            basePrize = 100;
             break;
           case CellType.User:
-            basePrize = 500;
+            basePrize = 200;
             break;
           case CellType.Clue:
-            basePrize = 1000;
+            basePrize = 500;
             break;
           case CellType.Flynn:
-            basePrize = 1500;
+            basePrize = 1000;
             break;
           default:
             basePrize = 0;
@@ -123,6 +123,11 @@ export class GameEngine {
   }
 
   public async revealCells() {
+    //TODO: when paused it should stop everything this is still going
+    // while (this.paused) {
+    //   await this.pausePromise;
+    // }
+
     const availableCells = this.grid
       .getCells()
       .filter((cell) => !cell.getIsRevealed());
@@ -173,11 +178,11 @@ export class GameEngine {
   }
 
   private getHighScoreBadge(count: number): HighScoreBadge | null {
-    if (count >= 6 && count < 9) {
+    if (count >= 10 && count < 15) {
       return HighScoreBadge.Double;
-    } else if (count >= 9 && count < 12) {
+    } else if (count >= 15 && count < 20) {
       return HighScoreBadge.Triple;
-    } else if (count >= 12) {
+    } else if (count >= 20) {
       return HighScoreBadge.Mega;
     }
     return null;

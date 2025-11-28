@@ -42,12 +42,12 @@ export class TutorialPopup extends Container {
 
     this.tutorialLabel = new Label({
       text:
-        "Tron Sweep is a match-3 style game.\n" +
-        "Reveal cells and try to find three or more of the same type to win!\n\n" +
+        "Tron Sweep is a match-5 style game.\n" +
+        "Reveal cells and try to find five or more of the same type to win!\n\n" +
         "If you reveal enough matching discs in a combination, you'll earn special badges:\n" +
-        "- Double: for 6 or more\n" +
-        "- Triple: for 9 or more\n" +
-        "- Mega: for 12 or more\n\n" +
+        "- Double: for 10 or more\n" +
+        "- Triple: for 15 or more\n" +
+        "- Mega: for 20 or more\n\n" +
         "The bigger your combination, the higher the badge and the greater your reward!",
 
       style: {
