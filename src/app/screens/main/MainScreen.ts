@@ -15,6 +15,8 @@ import { gameEngine } from "../../getGameEngine";
 import { DisclaimerPopup } from "../../popups/DisclaimerPopup";
 import { TutorialPopup } from "../../popups/TutorialPopup";
 import { GameOverPopup } from "../../popups/GameOverPopup";
+import { Label } from "../../ui/Label";
+import { Colors } from "../../utils/colors";
 
 /** The screen that holds the app */
 export class MainScreen extends Container {
@@ -30,6 +32,7 @@ export class MainScreen extends Container {
   private logo: Sprite;
   private grid: Grid;
   private balanceDisplay: BalanceDisplay;
+  private currentMusicLabel: Label | null = null;
 
   constructor() {
     super();
@@ -59,6 +62,12 @@ export class MainScreen extends Container {
     this.addChild(this.grid);
 
     gameEngine().init(this.grid, this.balanceDisplay);
+
+    this.currentMusicLabel = new Label({
+      style: { fill: Colors.Cyan, fontSize: 22 },
+    });
+
+    this.addChild(this.currentMusicLabel);
 
     const buttonAnimations = {
       hover: {
@@ -126,6 +135,10 @@ export class MainScreen extends Container {
         this.sweepButton.enable();
       }
     });
+
+    creationEngine().audio.bgm.onSongChange = (_, title) => {
+      this.currentMusicLabel.text = title;
+    };
   }
 
   /** Prepare the screen just before showing */
@@ -178,6 +191,10 @@ export class MainScreen extends Container {
     this.balanceDisplay.x = width - 375;
     this.balanceDisplay.y = height - 100;
 
+    this.currentMusicLabel.anchor.set(0, 1);
+    this.currentMusicLabel.x = 50;
+    this.currentMusicLabel.y = height - 50;
+
     this.sweepButton.x = width / 2;
     //This is because on mobile balance display would be underneath sweep button
     this.sweepButton.y = width < 800 ? height - 250 : height - 100;
@@ -187,9 +204,7 @@ export class MainScreen extends Container {
   public async show(): Promise<void> {
     await creationEngine().navigation.presentPopup(DisclaimerPopup);
     creationEngine().navigation.presentPopup(TutorialPopup);
-    creationEngine().audio.bgm.play("main/sounds/tron-legacy-end-of-line.mp3", {
-      volume: 0.8,
-    });
+    creationEngine().audio.bgm.playRandomBgm();
 
     const elementsToAnimate = [
       this.pauseButton,

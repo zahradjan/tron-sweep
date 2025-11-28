@@ -1,6 +1,7 @@
 import type { PlayOptions, Sound } from "@pixi/sound";
 import { sound } from "@pixi/sound";
 import { animate } from "motion";
+import { bgmSongs } from "../../app/utils/songs";
 
 /**
  * Handles music background, playing only one audio file in loop at time,
@@ -9,16 +10,16 @@ import { animate } from "motion";
  */
 export class BGM {
   /** Alias of the current music being played */
-  public currentAlias?: string;
+  public currentTitle?: string;
   /** Current music instance being played */
   public current?: Sound;
   /** Current volume set */
   private volume = 1;
 
   /** Play a background music, fading out and stopping the previous, if there is one */
-  public async play(alias: string, options?: PlayOptions) {
+  public async play(alias: string, title: string, options?: PlayOptions) {
     // Do nothing if the requested music is already being played
-    if (this.currentAlias === alias) return;
+    if (this.currentTitle === title) return;
 
     // Fade out then stop current music
     if (this.current) {
@@ -32,9 +33,9 @@ export class BGM {
 
     // Find out the new instance to be played
     this.current = sound.find(alias);
-
+    if (this.onSongChange) this.onSongChange(alias, title);
     // Play and fade in the new music
-    this.currentAlias = alias;
+    this.currentTitle = title;
     this.current.play({ loop: true, ...options });
     this.current.volume = 0;
     animate(
@@ -65,6 +66,27 @@ export class BGM {
   public setVolume(v: number) {
     this.volume = v;
     if (this.current) this.current.volume = this.volume;
+  }
+
+  public onSongChange?: (alias: string, title: string) => void;
+
+  public async playRandomBgm() {
+    const songs = bgmSongs;
+    if (songs.length === 0) return;
+
+    const pickRandomSong = () =>
+      songs[Math.floor(Math.random() * songs.length)];
+
+    const playNext = async () => {
+      const song = pickRandomSong();
+      await this.play(song.path, song.title, {
+        volume: 0.8,
+        loop: false,
+        complete: () => playNext(),
+      });
+    };
+
+    await playNext();
   }
 }
 
