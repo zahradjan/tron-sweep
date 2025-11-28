@@ -113,9 +113,17 @@ export class BalanceDisplay extends Container {
       );
     }
     await Promise.all([
-      await animate(
+      animate(
         this.balanceValue.scale,
         { x: 2, y: 2 },
+        {
+          duration: 0.4,
+          ease: "anticipate",
+        }
+      ).finished,
+      animate(
+        this.balanceValue,
+        { y: this.balanceValue.y - 50 },
         {
           duration: 0.4,
           ease: "anticipate",
@@ -128,7 +136,15 @@ export class BalanceDisplay extends Container {
           this.balanceValue.text = `${Math.round(latest)}`;
         },
       }).finished,
-      await animate(
+      animate(
+        this.balanceValue,
+        { y: this.balanceValue.y + 50 },
+        {
+          duration: 0.4,
+          ease: "anticipate",
+        }
+      ).finished,
+      animate(
         this.balanceValue.scale,
         { x: 1, y: 1 },
         {
@@ -161,9 +177,17 @@ export class BalanceDisplay extends Container {
 
     this.winValue.style.fill = Colors.Orange;
     await Promise.all([
-      await animate(
+      animate(
         this.winValue.scale,
         { x: 2, y: 2 },
+        {
+          duration: 0.4,
+          ease: "anticipate",
+        }
+      ).finished,
+      animate(
+        this.winValue,
+        { y: this.winValue.y - 50 },
         {
           duration: 0.4,
           ease: "anticipate",
@@ -176,7 +200,15 @@ export class BalanceDisplay extends Container {
           this.winValue.text = `${Math.round(latest)}`;
         },
       }).finished,
-      await animate(
+      animate(
+        this.winValue,
+        { y: this.winValue.y + 50 },
+        {
+          duration: 0.4,
+          ease: "anticipate",
+        }
+      ).finished,
+      animate(
         this.winValue.scale,
         { x: 1, y: 1 },
         {
