@@ -3,6 +3,7 @@ import { RoundedBox } from "../../ui/RoundedBox";
 import { Label } from "../../ui/Label";
 import { Colors } from "../../utils/colors";
 import { animate } from "motion";
+import { creationEngine } from "../../getCreationEngine";
 
 export class BalanceDisplay extends Container {
   private panel: Container;
@@ -88,19 +89,54 @@ export class BalanceDisplay extends Container {
   public getBalance() {
     return this.balanceValue;
   }
-  public async setBalance(balance: number) {
+  public async setBalance(
+    balance: number,
+    isAnimated: boolean = true,
+    playSound: boolean = false
+  ) {
     const current = parseInt(this.balanceValue.text.replace(/\D/g, "")) || 0;
     if (current === balance) {
       this.balanceValue.text = `${balance}`;
       return;
     }
-    await animate(current, balance, {
-      duration: 2,
-      ease: "easeOut",
-      onUpdate: (latest) => {
-        this.balanceValue.text = `${Math.round(latest)}`;
-      },
-    }).finished;
+
+    if (!isAnimated) {
+      this.balanceValue.text = `${balance}`;
+      return;
+    }
+    if (playSound) {
+      creationEngine().audio.sfx.play(
+        "main/sounds/coins-drop-sound-effect.mp3",
+        {
+          end: 2.8,
+        }
+      );
+    }
+    await Promise.all([
+      await animate(
+        this.balanceValue.scale,
+        { x: 2, y: 2 },
+        {
+          duration: 0.4,
+          ease: "anticipate",
+        }
+      ).finished,
+      await animate(current, balance, {
+        duration: 2,
+        ease: "easeOut",
+        onUpdate: (latest) => {
+          this.balanceValue.text = `${Math.round(latest)}`;
+        },
+      }).finished,
+      await animate(
+        this.balanceValue.scale,
+        { x: 1, y: 1 },
+        {
+          duration: 0.4,
+          ease: "anticipate",
+        }
+      ).finished,
+    ]);
     this.balanceValue.text = `${balance}`;
   }
 
@@ -118,6 +154,10 @@ export class BalanceDisplay extends Container {
       this.winValue.text = `${winValue}`;
       return;
     }
+
+    creationEngine().audio.sfx.play("main/sounds/coins-drop-sound-effect.mp3", {
+      end: 2.8,
+    });
 
     this.winValue.style.fill = Colors.Orange;
     await Promise.all([

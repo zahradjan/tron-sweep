@@ -33,9 +33,9 @@ export class GameEngine {
   public init(grid: Grid, balanceDisplay: BalanceDisplay) {
     this.grid = grid;
     this.balanceDisplay = balanceDisplay;
-    this.balanceDisplay.setBalance(this.balance);
+    this.balanceDisplay.setBalance(this.balance, false, false);
     this.balanceDisplay.setSweepCost(this.SWEEP_COST);
-    this.balanceDisplay.setWinValue(0);
+    this.balanceDisplay.setWinValue(0, false);
   }
 
   public checkWinningCells(): WinningResult {
@@ -95,13 +95,13 @@ export class GameEngine {
       }
 
       await this.setWinningCells(winningResult);
-      await new Promise((resolve) => setTimeout(resolve, 200));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       await this.showHighScoreBadge(badgeCounts);
       this.win += totalPrize;
       this.balance += this.win;
       console.log("Win: ", this.win);
       await this.balanceDisplay.setWinValue(this.win);
-      await this.balanceDisplay.setBalance(this.balance);
+      await this.balanceDisplay.setBalance(this.balance, true, true);
     }
   }
 
@@ -154,7 +154,7 @@ export class GameEngine {
     this.grid.reset();
     this.win = 0;
     this.balanceDisplay.setWinValue(0, false);
-    this.balanceDisplay.setBalance(this.balance);
+    this.balanceDisplay.setBalance(this.balance, false, false);
     this.balanceDisplay.setSweepCost(this.SWEEP_COST);
   }
 
@@ -169,7 +169,7 @@ export class GameEngine {
 
   public subtractSweepCost() {
     this.balance -= this.SWEEP_COST;
-    this.balanceDisplay.setBalance(this.balance);
+    this.balanceDisplay.setBalance(this.balance, true, false);
   }
 
   private getHighScoreBadge(count: number): HighScoreBadge | null {

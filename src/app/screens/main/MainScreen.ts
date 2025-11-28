@@ -123,6 +123,9 @@ export class MainScreen extends Container {
         await gameEngine().revealCells();
 
         const winningResult = gameEngine().checkWinningCells();
+        if (winningResult.won) {
+          creationEngine().audio.sfx.play("main/sounds/game-bonus.mp3");
+        }
         console.log("result", winningResult);
 
         await gameEngine().countWinScore(winningResult);

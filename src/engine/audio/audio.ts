@@ -18,9 +18,6 @@ export class BGM {
 
   /** Play a background music, fading out and stopping the previous, if there is one */
   public async play(alias: string, title: string, options?: PlayOptions) {
-    // Do nothing if the requested music is already being played
-    if (this.currentTitle === title) return;
-
     // Fade out then stop current music
     if (this.current) {
       const current = this.current;

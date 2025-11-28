@@ -1,5 +1,6 @@
 import { animate } from "motion";
 import { Container, Sprite } from "pixi.js";
+import { creationEngine } from "../../getCreationEngine";
 
 export enum CellType {
   Program = "program",
@@ -177,7 +178,9 @@ export class Cell extends Container {
 
     trail.anchor.set(1, 0.5);
     trail.x = this.cellSize;
-
+    creationEngine().audio.sfx.play("main/sounds/whoosh-03.mp3", {
+      end: 0.4,
+    });
     await Promise.all([
       animate(trail.scale, { x: 0 }, { duration: 0.2, ease: "circOut" })
         .finished,

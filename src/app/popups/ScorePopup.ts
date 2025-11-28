@@ -47,7 +47,7 @@ export class ScorePopup extends Container {
         new BlurFilter({ strength: 5 }),
       ];
     }
-
+    creationEngine().audio.sfx.play("main/sounds/purchase-success.mp3");
     this.panel.scale.set(0);
     await animate(
       this.panel.scale,

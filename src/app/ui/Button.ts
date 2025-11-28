@@ -91,10 +91,12 @@ export class Button extends FancyButton {
     );
   }
   private handleHover() {
-    creationEngine().audio.sfx.play("main/sounds/sfx-hover.wav");
+    // creationEngine().audio.sfx.play("main/sounds/sfx-hover.wav");
   }
 
   private handleDown() {
-    creationEngine().audio.sfx.play("main/sounds/sfx-press.wav");
+    creationEngine().audio.sfx.play("main/sounds/button-click.mp3", {
+      start: 0.2,
+    });
   }
 }
