@@ -100,7 +100,7 @@ The bigger your combination, the higher the badge and the greater your reward!`,
     this.panel.y = height * 0.5;
     const margin = 40;
     const maxPanelWidth = Math.max(320, Math.min(1400, width - margin * 2));
-    const maxPanelHeight = Math.max(200, Math.min(1000, height - margin * 2));
+    const maxPanelHeight = Math.max(750, Math.min(1000, height - margin * 2));
 
     this.panelBase.width = maxPanelWidth;
     this.panelBase.height = maxPanelHeight;

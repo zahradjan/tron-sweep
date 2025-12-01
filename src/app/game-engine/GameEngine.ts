@@ -37,7 +37,9 @@ export class GameEngine {
   private paused = false;
   private pausePromise: Promise<void> | null = null;
   private pauseResolver: (() => void) | null = null;
-  private badgeCounts: Record<HighScoreBadge, number> = DEFAULT_BADGE_COUNTS;
+  private badgeCounts: Record<HighScoreBadge, number> = {
+    ...DEFAULT_BADGE_COUNTS,
+  };
 
   constructor() {}
 
@@ -74,7 +76,7 @@ export class GameEngine {
 
     return winningResult;
   }
-  public async countTotalReward(winningResult: WinningResult) {
+  public async countTotalReward(winningResult: WinningResult): Promise<number> {
     if (winningResult.won) {
       let totalReward = 0;
 
