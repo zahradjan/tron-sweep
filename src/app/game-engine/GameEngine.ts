@@ -118,13 +118,16 @@ export class GameEngine {
     }
   }
   public countHighScoreBadges(winningCells: WinningCell[]) {
+    console.log("badge count", this.badgeCounts);
+    const counts = { ...DEFAULT_BADGE_COUNTS };
     for (const winningCell of winningCells) {
       const highScoreBadge = this.getHighScoreBadge(winningCell.count);
       if (highScoreBadge) {
+        counts[highScoreBadge]++;
         this.badgeCounts[highScoreBadge]++;
       }
     }
-    return this.badgeCounts;
+    return counts;
   }
 
   public async showHighScoreBadges(
@@ -144,7 +147,7 @@ export class GameEngine {
     }
   }
 
-  public async revealCells() {
+  public async revealCells(shouldRevealAll?: () => boolean) {
     const availableCells = this.grid
       .getCells()
       .filter((cell) => !cell.getIsRevealed());
@@ -155,7 +158,11 @@ export class GameEngine {
     }
 
     for (const cell of availableCells) {
-      await pauseAware(() => cell.reveal(), this);
+      if (shouldRevealAll()) {
+        cell.reveal();
+      } else {
+        await pauseAware(() => cell.reveal(), this);
+      }
     }
   }
 
@@ -210,7 +217,7 @@ export class GameEngine {
 
   public async subtractSweepCost() {
     this.balance -= this.SWEEP_COST;
-    this.balanceDisplay.setBalance(this.balance, true, false);
+    await this.balanceDisplay.setBalance(this.balance, true, false);
   }
 
   private getHighScoreBadge(count: number): HighScoreBadge | null {

@@ -36,6 +36,9 @@ export class MainScreen extends Container {
   private balanceDisplay: BalanceDisplay;
   private currentMusicLabel: Label | null = null;
 
+  private isRevealingCells = false;
+  private revealAllCells = false;
+
   constructor() {
     super();
     this.background = Sprite.from("tron-arena.png");
@@ -118,13 +121,21 @@ export class MainScreen extends Container {
       if (gameEngine().getIsGameOver()) return;
       if (!gameEngine().hasEnoughBalance()) return;
 
-      this.sweepButton.disable();
+      if (this.isRevealingCells) {
+        this.revealAllCells = true;
+        return;
+      }
+
+      this.isRevealingCells = true;
+      this.revealAllCells = false;
+      this.sweepButton.text = "Sweep All";
 
       try {
         // this should be awaited as async function but i dont wanna wait for it to finish
         gameEngine().subtractSweepCost();
 
-        await gameEngine().revealCells();
+        await gameEngine().revealCells(() => this.revealAllCells);
+        this.sweepButton.disable();
 
         const winningResult = await pauseAwareSync<WinningResult>(
           () => gameEngine().checkWinningCells(),
@@ -139,6 +150,7 @@ export class MainScreen extends Container {
         const highScoreBadges = gameEngine().countHighScoreBadges(
           winningResult.winningCells
         );
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         await gameEngine().showHighScoreBadges(highScoreBadges);
 
         await gameEngine().countTotalReward(winningResult);
@@ -148,7 +160,10 @@ export class MainScreen extends Container {
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
         creationEngine().navigation.presentPopup(GameOverPopup);
+        this.sweepButton.text = "Sweep";
         this.sweepButton.enable();
+        this.isRevealingCells = false;
+        this.revealAllCells = false;
       }
     });
 
