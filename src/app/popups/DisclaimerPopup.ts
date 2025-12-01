@@ -60,6 +60,19 @@ export class DisclaimerPopup extends Container {
     this.bg.height = height;
     this.panel.x = width * 0.5;
     this.panel.y = height * 0.5;
+    const margin = 40;
+    const maxPanelWidth = Math.max(320, Math.min(1400, width - margin * 2));
+    const maxPanelHeight = Math.max(200, Math.min(600, height - margin * 2));
+
+    this.panelBase.width = maxPanelWidth;
+    this.panelBase.height = maxPanelHeight;
+
+    this.disclaimerLabel.style.wordWrapWidth = maxPanelWidth - 60;
+
+    this.disclaimerLabel.x = 0;
+    this.disclaimerLabel.y = 0;
+    this.disclaimerLabelTitle.x = 0;
+    this.disclaimerLabelTitle.y = -maxPanelHeight / 2 + 100;
   }
 
   public async show() {

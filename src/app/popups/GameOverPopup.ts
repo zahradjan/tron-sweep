@@ -73,6 +73,7 @@ export class GameOverPopup extends Container {
     this.panel.addChild(this.balanceLabel);
 
     const balance = gameEngine().getBalance();
+
     this.balanceValueLabel = new Label({
       text: `${balance}`,
       style: { fill: Colors.Cyan, fontSize: 50 },
@@ -80,13 +81,17 @@ export class GameOverPopup extends Container {
     this.balanceValueLabel.y = 55;
     this.panel.addChild(this.balanceValueLabel);
 
-    this.nextGameButton = new Button({ text: "Next Game" });
-    this.nextGameButton.y = 150;
-    this.nextGameButton.onPress.connect(() => {
-      creationEngine().navigation.dismissPopup();
-      gameEngine().nextGame();
-    });
-    this.panel.addChild(this.nextGameButton);
+    const sweepCost = gameEngine().getSweepCost();
+
+    if (balance >= sweepCost) {
+      this.nextGameButton = new Button({ text: "Next Game" });
+      this.nextGameButton.y = 150;
+      this.nextGameButton.onPress.connect(() => {
+        creationEngine().navigation.dismissPopup();
+        gameEngine().nextGame();
+      });
+      this.panel.addChild(this.nextGameButton);
+    }
 
     this.exitGameButton = new Button({ text: "Exit" });
     this.exitGameButton.y = 275;

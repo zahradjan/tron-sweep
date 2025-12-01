@@ -41,19 +41,15 @@ export class TutorialPopup extends Container {
     this.panel.addChild(this.logo);
 
     this.tutorialLabel = new Label({
-      text:
-        "Tron Sweep is a match-5 style game.\n" +
-        "Reveal cells and try to find five or more of the same type to win!\n\n" +
-        "If you reveal enough matching discs in a combination, you'll earn special badges:\n" +
-        "- Double: for 10 or more\n" +
-        "- Triple: for 15 or more\n" +
-        "- Mega: for 20 or more\n\n" +
-        "The bigger your combination, the higher the badge and the greater your reward!",
-
+      text: `Tron Sweep is a match-5 style game.
+Reveal cells and try to find five or more of the same type to win!
+Combination badges: Double (10 or more), Triple (15 or more), Mega (20 or more).
+The bigger your combination, the higher the badge and the greater your reward!`,
       style: {
         fill: Colors.Cyan,
         fontSize: 26,
-        wordWrapWidth: 600,
+        wordWrap: true,
+        breakWords: true,
         align: "center",
       },
     });
@@ -102,6 +98,26 @@ export class TutorialPopup extends Container {
     this.bg.height = height;
     this.panel.x = width * 0.5;
     this.panel.y = height * 0.5;
+    const margin = 40;
+    const maxPanelWidth = Math.max(320, Math.min(1400, width - margin * 2));
+    const maxPanelHeight = Math.max(200, Math.min(1000, height - margin * 2));
+
+    this.panelBase.width = maxPanelWidth;
+    this.panelBase.height = maxPanelHeight;
+
+    this.tutorialLabel.style.wordWrapWidth = maxPanelWidth - 60;
+
+    const badgeY = 150;
+    const badgeSpacing = maxPanelWidth / 3;
+    const centerX = 0;
+
+    this.doubleBadge.x = centerX - badgeSpacing;
+    this.tripleBadge.x = centerX;
+    this.megaBadge.x = centerX + badgeSpacing;
+
+    this.doubleBadge.y = badgeY;
+    this.tripleBadge.y = badgeY;
+    this.megaBadge.y = badgeY;
   }
 
   public async show() {

@@ -1,3 +1,4 @@
+import { pauseAware } from "../../engine/utils/pause";
 import { creationEngine } from "../getCreationEngine";
 import { ScorePopup } from "../popups/ScorePopup";
 import { BalanceDisplay } from "../screens/main/BalanceDisplay";
@@ -10,7 +11,7 @@ export enum HighScoreBadge {
   Mega = "mega",
 }
 
-interface WinningResult {
+export interface WinningResult {
   won: boolean;
   winningCells: WinningCell[];
 }
@@ -20,6 +21,12 @@ interface WinningCell {
   count: number;
 }
 
+export const DEFAULT_BADGE_COUNTS: Record<HighScoreBadge, number> = {
+  [HighScoreBadge.Double]: 0,
+  [HighScoreBadge.Triple]: 0,
+  [HighScoreBadge.Mega]: 0,
+};
+
 export class GameEngine {
   private win: number = 0;
   private balance: number = 2000;
@@ -27,6 +34,10 @@ export class GameEngine {
   private gameOver: boolean = false;
   private grid!: Grid;
   private balanceDisplay!: BalanceDisplay;
+  private paused = false;
+  private pausePromise: Promise<void> | null = null;
+  private pauseResolver: (() => void) | null = null;
+  private badgeCounts: Record<HighScoreBadge, number> = DEFAULT_BADGE_COUNTS;
 
   constructor() {}
 
@@ -56,60 +67,69 @@ export class GameEngine {
       }
     }
 
-    return { won: winningCells.length > 0, winningCells };
+    const winningResult: WinningResult = {
+      won: winningCells.length > 0,
+      winningCells,
+    };
+
+    return winningResult;
   }
-  public async countWinScore(winningResult: WinningResult) {
+  public async countTotalReward(winningResult: WinningResult) {
     if (winningResult.won) {
-      let totalPrize = 0;
-      const badgeCounts: Record<HighScoreBadge, number> = {
-        [HighScoreBadge.Double]: 0,
-        [HighScoreBadge.Triple]: 0,
-        [HighScoreBadge.Mega]: 0,
-      };
-      for (const win of winningResult.winningCells) {
-        let basePrize = 0;
-        switch (win.type) {
+      let totalReward = 0;
+
+      for (const winningCell of winningResult.winningCells) {
+        let reward = 0;
+        switch (winningCell.type) {
           case CellType.Program:
-            basePrize = 100;
+            reward = 100;
             break;
           case CellType.User:
-            basePrize = 200;
+            reward = 200;
             break;
           case CellType.Clue:
-            basePrize = 500;
+            reward = 500;
             break;
           case CellType.Flynn:
-            basePrize = 1000;
+            reward = 1000;
             break;
           default:
-            basePrize = 0;
+            reward = 0;
         }
-        const multiplier = win.count - 2;
-        const highScoreBadge = this.getHighScoreBadge(win.count);
-        if (highScoreBadge) {
-          badgeCounts[highScoreBadge]++;
-        }
-
-        const prize = basePrize * multiplier;
-        totalPrize += prize;
+        const multiplier = this.getHighScoreMultiplier(winningCell.count);
+        const finalReward = reward * multiplier;
+        totalReward += finalReward;
       }
 
-      await this.setWinningCells(winningResult);
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      await this.showHighScoreBadge(badgeCounts);
-      this.win += totalPrize;
+      this.win += totalReward;
       this.balance += this.win;
       console.log("Win: ", this.win);
-      await this.balanceDisplay.setWinValue(this.win);
-      await this.balanceDisplay.setBalance(this.balance, true, true);
+      await pauseAware<void>(
+        () => this.balanceDisplay.setWinValue(this.win),
+        this
+      );
+      await pauseAware<void>(
+        () => this.balanceDisplay.setBalance(this.balance, true, true),
+        this
+      );
+      return totalReward;
     }
   }
+  public countHighScoreBadges(winningCells: WinningCell[]) {
+    for (const winningCell of winningCells) {
+      const highScoreBadge = this.getHighScoreBadge(winningCell.count);
+      if (highScoreBadge) {
+        this.badgeCounts[highScoreBadge]++;
+      }
+    }
+    return this.badgeCounts;
+  }
 
-  public async showHighScoreBadge(
-    highScoreBadge: Record<HighScoreBadge, number>
+  public async showHighScoreBadges(
+    highScoreBadges: Record<HighScoreBadge, number>
   ) {
     for (const badge of Object.values(HighScoreBadge)) {
-      const count = highScoreBadge[badge];
+      const count = highScoreBadges[badge];
       if (count > 0) {
         await creationEngine().navigation.presentPopup(ScorePopup, {
           badge,
@@ -123,11 +143,6 @@ export class GameEngine {
   }
 
   public async revealCells() {
-    //TODO: when paused it should stop everything this is still going
-    // while (this.paused) {
-    //   await this.pausePromise;
-    // }
-
     const availableCells = this.grid
       .getCells()
       .filter((cell) => !cell.getIsRevealed());
@@ -136,8 +151,9 @@ export class GameEngine {
       console.log("All cells already revealed!");
       return [];
     }
+
     for (const cell of availableCells) {
-      await cell.reveal();
+      await pauseAware(() => cell.reveal(), this);
     }
   }
 
@@ -146,13 +162,31 @@ export class GameEngine {
     const revealedCells = this.grid.getRevealedCells();
     const promises = revealedCells.map((cell) => {
       if (winningTypes.includes(cell.getType())) {
-        return cell.setIsWinning(true);
+        return pauseAware(() => cell.setIsWinning(true), this);
       } else {
-        return cell.setIsWinning(false);
+        return pauseAware(() => cell.setIsWinning(false), this);
       }
     });
 
     await Promise.all(promises);
+  }
+
+  public async pause() {
+    this.paused = true;
+    if (!this.pausePromise) {
+      this.pausePromise = new Promise((resolve) => {
+        this.pauseResolver = resolve;
+      });
+    }
+  }
+
+  public async resume() {
+    this.paused = false;
+    if (this.pauseResolver) {
+      this.pauseResolver();
+      this.pauseResolver = null;
+      this.pausePromise = null;
+    }
   }
 
   public nextGame() {
@@ -172,7 +206,7 @@ export class GameEngine {
     return true;
   }
 
-  public subtractSweepCost() {
+  public async subtractSweepCost() {
     this.balance -= this.SWEEP_COST;
     this.balanceDisplay.setBalance(this.balance, true, false);
   }
@@ -188,6 +222,17 @@ export class GameEngine {
     return null;
   }
 
+  private getHighScoreMultiplier(count: number): number {
+    if (count >= 10 && count < 15) {
+      return 2;
+    } else if (count >= 15 && count < 20) {
+      return 3;
+    } else if (count >= 20) {
+      return 4;
+    }
+    return 1;
+  }
+
   public getIsGameOver() {
     return this.gameOver;
   }
@@ -198,5 +243,21 @@ export class GameEngine {
 
   public getBalance() {
     return this.balance;
+  }
+
+  public getPaused() {
+    return this.paused;
+  }
+
+  public getPausePromise() {
+    return this.pausePromise;
+  }
+
+  public getBadgeCounts() {
+    return this.badgeCounts;
+  }
+
+  public getSweepCost() {
+    return this.SWEEP_COST;
   }
 }

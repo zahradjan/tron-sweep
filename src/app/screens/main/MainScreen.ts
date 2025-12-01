@@ -17,6 +17,8 @@ import { TutorialPopup } from "../../popups/TutorialPopup";
 import { GameOverPopup } from "../../popups/GameOverPopup";
 import { Label } from "../../ui/Label";
 import { Colors } from "../../utils/colors";
+import { pauseAwareSync } from "../../../engine/utils/pause";
+import { WinningResult } from "../../game-engine/GameEngine";
 
 /** The screen that holds the app */
 export class MainScreen extends Container {
@@ -91,6 +93,7 @@ export class MainScreen extends Container {
     });
     this.pauseButton.onPress.connect(() => {
       creationEngine().navigation.presentPopup(PausePopup);
+      gameEngine().pause();
     });
     this.addChild(this.pauseButton);
 
@@ -118,17 +121,27 @@ export class MainScreen extends Container {
       this.sweepButton.disable();
 
       try {
+        // this should be awaited as async function but i dont wanna wait for it to finish
         gameEngine().subtractSweepCost();
 
         await gameEngine().revealCells();
 
-        const winningResult = gameEngine().checkWinningCells();
+        const winningResult = await pauseAwareSync<WinningResult>(
+          () => gameEngine().checkWinningCells(),
+          gameEngine()
+        );
         if (winningResult.won) {
           creationEngine().audio.sfx.play("main/sounds/game-bonus.mp3");
         }
         console.log("result", winningResult);
 
-        await gameEngine().countWinScore(winningResult);
+        await gameEngine().setWinningCells(winningResult);
+        const highScoreBadges = gameEngine().countHighScoreBadges(
+          winningResult.winningCells
+        );
+        await gameEngine().showHighScoreBadges(highScoreBadges);
+
+        await gameEngine().countTotalReward(winningResult);
       } catch (error) {
         console.error("Sweep operation failed:", error);
       } finally {
@@ -158,12 +171,14 @@ export class MainScreen extends Container {
   public async pause() {
     this.mainContainer.interactiveChildren = false;
     this.paused = true;
+    gameEngine().pause();
   }
 
   /** Resume gameplay */
   public async resume() {
     this.mainContainer.interactiveChildren = true;
     this.paused = false;
+    gameEngine().resume();
   }
 
   /** Fully reset */
@@ -196,7 +211,7 @@ export class MainScreen extends Container {
 
     this.currentMusicLabel.anchor.set(0, 1);
     this.currentMusicLabel.x = 50;
-    this.currentMusicLabel.y = height - 50;
+    this.currentMusicLabel.y = height - 100;
 
     this.sweepButton.x = width / 2;
     //This is because on mobile balance display would be underneath sweep button
