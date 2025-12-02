@@ -19,6 +19,7 @@ import { Label } from "../../ui/Label";
 import { Colors } from "../../utils/colors";
 import { pauseAwareSync } from "../../../engine/utils/pause";
 import { WinningResult } from "../../game-engine/GameEngine";
+import { BadgesDisplay } from "./BadgesDisplay";
 
 /** The screen that holds the app */
 export class MainScreen extends Container {
@@ -34,6 +35,7 @@ export class MainScreen extends Container {
   private logo: Sprite;
   private grid: Grid;
   private balanceDisplay: BalanceDisplay;
+  private badgesDisplay: BadgesDisplay;
   private currentMusicLabel: Label | null = null;
 
   private isRevealingCells = false;
@@ -55,7 +57,8 @@ export class MainScreen extends Container {
     this.addChild(this.logo);
 
     this.balanceDisplay = new BalanceDisplay();
-
+    this.badgesDisplay = new BadgesDisplay();
+    this.addChild(this.badgesDisplay);
     this.addChild(this.balanceDisplay);
 
     this.grid = new Grid({
@@ -66,7 +69,7 @@ export class MainScreen extends Container {
     this.grid.pivot.set(this.grid.width / 2, this.grid.height / 2);
     this.addChild(this.grid);
 
-    gameEngine().init(this.grid, this.balanceDisplay);
+    gameEngine().init(this.grid, this.balanceDisplay, this.badgesDisplay);
 
     this.currentMusicLabel = new Label({
       style: { fill: Colors.Cyan, fontSize: 22 },
@@ -152,6 +155,7 @@ export class MainScreen extends Container {
         );
         await new Promise((resolve) => setTimeout(resolve, 1000));
         await gameEngine().showHighScoreBadges(highScoreBadges);
+        await gameEngine().setBadgesInBadgesDisplay();
 
         await gameEngine().countTotalReward(winningResult);
       } catch (error) {
@@ -223,6 +227,9 @@ export class MainScreen extends Container {
 
     this.balanceDisplay.x = width - 375;
     this.balanceDisplay.y = height - 100;
+
+    this.badgesDisplay.x = width - 200;
+    this.badgesDisplay.y = height - 300;
 
     this.currentMusicLabel.anchor.set(0, 1);
     this.currentMusicLabel.x = 50;

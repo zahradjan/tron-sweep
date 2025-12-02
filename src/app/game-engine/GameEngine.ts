@@ -1,6 +1,7 @@
 import { pauseAware } from "../../engine/utils/pause";
 import { creationEngine } from "../getCreationEngine";
 import { ScorePopup } from "../popups/ScorePopup";
+import { BadgesDisplay } from "../screens/main/BadgesDisplay";
 import { BalanceDisplay } from "../screens/main/BalanceDisplay";
 import { CellType } from "../screens/main/Cell";
 import { Grid } from "../screens/main/Grid";
@@ -40,12 +41,18 @@ export class GameEngine {
   private badgeCounts: Record<HighScoreBadge, number> = {
     ...DEFAULT_BADGE_COUNTS,
   };
+  private badgesDisplay!: BadgesDisplay;
 
   constructor() {}
 
-  public init(grid: Grid, balanceDisplay: BalanceDisplay) {
+  public init(
+    grid: Grid,
+    balanceDisplay: BalanceDisplay,
+    badgesDisplay: BadgesDisplay
+  ) {
     this.grid = grid;
     this.balanceDisplay = balanceDisplay;
+    this.badgesDisplay = badgesDisplay;
     this.balanceDisplay.setBalance(this.balance, false, false);
     this.balanceDisplay.setSweepCost(this.SWEEP_COST);
     this.balanceDisplay.setWinValue(0, false);
@@ -145,6 +152,10 @@ export class GameEngine {
         console.log(`${badge}! x${count}`);
       }
     }
+  }
+
+  public async setBadgesInBadgesDisplay() {
+    await this.badgesDisplay.setBadges(this.badgeCounts);
   }
 
   public async revealCells(shouldRevealAll?: () => boolean) {
