@@ -71,8 +71,10 @@ export class DisclaimerPopup extends Container {
 
     this.disclaimerLabel.x = 0;
     this.disclaimerLabel.y = 0;
+    this.disclaimerLabelTitle.anchor.set(0.5, 0);
     this.disclaimerLabelTitle.x = 0;
-    this.disclaimerLabelTitle.y = -maxPanelHeight * 0.3;
+    this.disclaimerLabelTitle.y =
+      this.panelBase.y - this.panelBase.height / 2 + 60;
   }
 
   public async show() {

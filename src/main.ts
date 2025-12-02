@@ -28,7 +28,7 @@ setGameEngine(gameEngine);
   // Initialize the creation engine instance
   await creationEngine.init({
     background: Colors.Tarawera,
-    resizeOptions: { minWidth: 768, minHeight: 1024, letterbox: false },
+    resizeOptions: { minWidth: 800, minHeight: 1280, letterbox: false },
   });
 
   // Initialize the user settings

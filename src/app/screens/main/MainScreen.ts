@@ -12,14 +12,14 @@ import { Button } from "../../ui/Button";
 import { Grid } from "./Grid";
 import { BalanceDisplay } from "./BalanceDisplay";
 import { gameEngine } from "../../getGameEngine";
-import { DisclaimerPopup } from "../../popups/DisclaimerPopup";
-import { TutorialPopup } from "../../popups/TutorialPopup";
 import { GameOverPopup } from "../../popups/GameOverPopup";
 import { Label } from "../../ui/Label";
 import { Colors } from "../../utils/colors";
 import { pauseAwareSync } from "../../../engine/utils/pause";
 import { WinningResult } from "../../game-engine/GameEngine";
 import { BadgesDisplay } from "./BadgesDisplay";
+import { DisclaimerPopup } from "../../popups/DisclaimerPopup";
+import { TutorialPopup } from "../../popups/TutorialPopup";
 
 /** The screen that holds the app */
 export class MainScreen extends Container {
@@ -236,8 +236,16 @@ export class MainScreen extends Container {
     this.currentMusicLabel.y = height - 100;
 
     this.sweepButton.x = width / 2;
-    //This is because on mobile balance display would be underneath sweep button
-    this.sweepButton.y = width < 800 ? height - 250 : height - 100;
+    this.sweepButton.y = height - 100;
+
+    if (width < 900) {
+      this.currentMusicLabel.x = 50;
+      this.currentMusicLabel.y = this.logo.height;
+      this.balanceDisplay.y = height - 150;
+      this.balanceDisplay.x = width / 2;
+      this.badgesDisplay.y = this.logo.height;
+      this.sweepButton.y = height - 300;
+    }
   }
 
   /** Show screen with animations */
