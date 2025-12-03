@@ -1,5 +1,5 @@
-import { HighScoreBadge } from "../game-engine/GameEngine";
-import { CellType } from "../screens/main/Cell";
+import { CellType } from "../model/CellType";
+import { HighScoreBadge } from "../model/HighScoreBadge";
 
 export const config = {
   grid: {

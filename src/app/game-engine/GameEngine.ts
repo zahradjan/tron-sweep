@@ -1,33 +1,15 @@
 import { pauseAware } from "../../engine/utils/pause";
 import { config } from "../config/config";
 import { creationEngine } from "../getCreationEngine";
+import { CellType } from "../model/CellType";
+import { HighScore } from "../model/HighScore";
+import { HighScoreBadge } from "../model/HighScoreBadge";
+import { WinningCell } from "../model/WinningCell";
+import { WinningResult } from "../model/WinningResult";
 import { ScorePopup } from "../popups/ScorePopup";
 import { BadgesDisplay } from "../screens/main/BadgesDisplay";
 import { BalanceDisplay } from "../screens/main/BalanceDisplay";
-import { CellType } from "../screens/main/Cell";
 import { Grid } from "../screens/main/Grid";
-
-export enum HighScoreBadge {
-  Double = "double",
-  Triple = "triple",
-  Mega = "mega",
-}
-
-export interface WinningResult {
-  won: boolean;
-  winningCells: WinningCell[];
-}
-
-interface WinningCell {
-  type: CellType;
-  count: number;
-}
-
-export interface HighScore {
-  badge: HighScoreBadge;
-  multiplier: number;
-  range: { min: number; max: number };
-}
 
 const HIGH_SCORES: HighScore[] = config.highScores;
 

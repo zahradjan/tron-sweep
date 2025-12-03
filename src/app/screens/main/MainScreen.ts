@@ -15,11 +15,11 @@ import { gameEngine } from "../../getGameEngine";
 import { GameOverPopup } from "../../popups/GameOverPopup";
 import { Label } from "../../ui/Label";
 import { pauseAwareSync } from "../../../engine/utils/pause";
-import { WinningResult } from "../../game-engine/GameEngine";
 import { BadgesDisplay } from "./BadgesDisplay";
 import { DisclaimerPopup } from "../../popups/DisclaimerPopup";
 import { TutorialPopup } from "../../popups/TutorialPopup";
 import { config } from "../../config/config";
+import { WinningResult } from "../../model/WinningResult";
 
 /** The screen that holds the app */
 export class MainScreen extends Container {

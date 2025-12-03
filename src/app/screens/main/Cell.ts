@@ -1,13 +1,8 @@
 import { animate } from "motion";
 import { Container, Sprite } from "pixi.js";
 import { creationEngine } from "../../getCreationEngine";
-
-export enum CellType {
-  Program = "program",
-  User = "user",
-  Clue = "clue",
-  Flynn = "flynn",
-}
+import { CellType } from "../../model/CellType";
+import { CellValue } from "../../model/CellValue";
 
 const cellSpritesMap = {
   [CellType.Program]: "tron-disc-100.png",
@@ -38,12 +33,6 @@ export const CELL_VALUES: Record<CellType, CellValue> = {
     sprite: cellSpritesMap[CellType.Flynn],
   },
 };
-
-export interface CellValue {
-  type: CellType;
-  price: number;
-  sprite?: string;
-}
 
 export class Cell extends Container {
   private coverSprite: Sprite;

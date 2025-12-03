@@ -2,8 +2,8 @@ import { animate } from "motion";
 import { BlurFilter, Container, Sprite, Texture } from "pixi.js";
 
 import { creationEngine } from "../getCreationEngine";
-import { HighScoreBadge } from "../game-engine/GameEngine";
 import { Label } from "../ui/Label";
+import { HighScoreBadge } from "../model/HighScoreBadge";
 
 export class ScorePopup extends Container {
   /** Container for the popup UI components */

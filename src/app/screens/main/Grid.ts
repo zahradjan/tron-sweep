@@ -1,15 +1,9 @@
 import { Container, Graphics } from "pixi.js";
 import { Colors } from "../../utils/colors";
-import { Cell, CELL_VALUES, CellType, CellValue } from "./Cell";
-
-export interface GridOptions {
-  rows: number;
-  cols: number;
-  cellSize: number;
-  borderColor?: number;
-  fillColor?: number;
-  gap?: number;
-}
+import { Cell, CELL_VALUES } from "./Cell";
+import { CellValue } from "../../model/CellValue";
+import { CellType } from "../../model/CellType";
+import { GridOptions } from "../../model/GridOptions";
 
 export class Grid extends Container {
   private cells: Cell[] = [];
