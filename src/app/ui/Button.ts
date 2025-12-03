@@ -2,7 +2,6 @@ import { FancyButton } from "@pixi/ui";
 import { creationEngine } from "../getCreationEngine";
 
 import { Label } from "./Label";
-import { Colors } from "../utils/colors";
 import { animate } from "motion";
 import { Container } from "pixi.js";
 
@@ -29,7 +28,6 @@ export class Button extends FancyButton {
       text: new Label({
         text: opts.text,
         style: {
-          fill: Colors.Cyan,
           align: "center",
           fontSize: opts.fontSize,
           whiteSpace: "normal",

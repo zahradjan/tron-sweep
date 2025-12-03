@@ -4,7 +4,6 @@ import { BlurFilter, Container, Sprite, Texture } from "pixi.js";
 import { creationEngine } from "../getCreationEngine";
 import { Label } from "../ui/Label";
 import { RoundedBox } from "../ui/RoundedBox";
-import { Colors } from "../utils/colors";
 
 /** Popup that shows a legal disclaimer */
 export class DisclaimerPopup extends Container {
@@ -31,7 +30,6 @@ export class DisclaimerPopup extends Container {
     this.disclaimerLabelTitle = new Label({
       text: "Disclaimer",
       style: {
-        fill: Colors.Cyan,
         fontSize: 56,
       },
     });
@@ -45,8 +43,6 @@ export class DisclaimerPopup extends Container {
         "This game is not affiliated with, endorsed by, or associated with Disney or any official TRON property.\n" +
         "For educational and demonstration purposes only.",
       style: {
-        fill: Colors.Cyan,
-        fontSize: 26,
         wordWrap: true,
         wordWrapWidth: 1400,
       },
@@ -94,7 +90,7 @@ export class DisclaimerPopup extends Container {
       { duration: 0.3, ease: "backOut" }
     );
 
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await new Promise((resolve) => setTimeout(resolve, 10000));
   }
 
   public async hide() {

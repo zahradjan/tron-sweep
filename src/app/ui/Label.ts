@@ -1,5 +1,6 @@
 import type { TextOptions, TextStyleOptions } from "pixi.js";
 import { Text } from "pixi.js";
+import { Colors } from "../utils/colors";
 
 const defaultLabelStyle: Partial<TextStyleOptions> = {
   fontFamily: "TR2N",
@@ -7,6 +8,8 @@ const defaultLabelStyle: Partial<TextStyleOptions> = {
   whiteSpace: "normal",
   wordWrap: false,
   padding: 100,
+  fontSize: 24,
+  fill: Colors.Cyan,
 };
 
 export type LabelOptions = typeof defaultLabelStyle;

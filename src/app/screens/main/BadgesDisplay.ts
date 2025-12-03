@@ -4,7 +4,6 @@ import {
   DEFAULT_BADGE_COUNTS,
   HighScoreBadge,
 } from "../../game-engine/GameEngine";
-import { Colors } from "../../utils/colors";
 import { animate } from "motion";
 import { creationEngine } from "../../getCreationEngine";
 
@@ -42,10 +41,6 @@ export class BadgesDisplay extends Container {
 
     this.doubleBadgeCounterLabel = new Label({
       text: `x${0}`,
-      style: {
-        fontSize: 22,
-        fill: Colors.Cyan,
-      },
     });
     this.doubleBadgeCounterLabel.y = this.doubleBadge.y + 60;
     this.doubleBadgeCounterLabel.x = this.doubleBadge.x;
@@ -65,10 +60,6 @@ export class BadgesDisplay extends Container {
 
     this.tripleBadgeCounterLabel = new Label({
       text: "",
-      style: {
-        fontSize: 22,
-        fill: Colors.Cyan,
-      },
     });
     this.tripleBadgeCounterLabel.y = this.tripleBadge.y + 60;
     this.tripleBadgeCounterLabel.x = this.tripleBadge.x;
@@ -84,10 +75,6 @@ export class BadgesDisplay extends Container {
     this.panel.addChild(this.megaBadge);
     this.megaBadgeCounterLabel = new Label({
       text: `x${0}`,
-      style: {
-        fontSize: 22,
-        fill: Colors.Cyan,
-      },
     });
     this.megaBadgeCounterLabel.y = this.megaBadge.y + 60;
     this.megaBadgeCounterLabel.x = this.megaBadge.x;

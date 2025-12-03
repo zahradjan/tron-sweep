@@ -28,10 +28,6 @@ export class BalanceDisplay extends Container {
     // Static label
     this.balanceLabel = new Label({
       text: "Balance:",
-      style: {
-        fontSize: 22,
-        fill: Colors.Cyan,
-      },
     });
     this.balanceLabel.x = -this.panelBase.width / 2 + 100;
     this.panel.addChild(this.balanceLabel);
@@ -39,30 +35,18 @@ export class BalanceDisplay extends Container {
     // Value label (number only)
     this.balanceValue = new Label({
       text: "0",
-      style: {
-        fontSize: 22,
-        fill: Colors.Cyan,
-      },
     });
     this.balanceValue.x = this.balanceLabel.x + this.balanceLabel.width;
     this.panel.addChild(this.balanceValue);
 
     this.sweepCost = new Label({
       text: "Sweep Cost: 0",
-      style: {
-        fontSize: 22,
-        fill: Colors.Cyan,
-      },
     });
     this.sweepCost.x = 25;
     this.panel.addChild(this.sweepCost);
 
     this.winLabel = new Label({
       text: "Win:",
-      style: {
-        fontSize: 22,
-        fill: Colors.Cyan,
-      },
     });
 
     this.winLabel.x = this.panelBase.width / 2 - 175;
@@ -70,10 +54,6 @@ export class BalanceDisplay extends Container {
 
     this.winValue = new Label({
       text: "0",
-      style: {
-        fontSize: 22,
-        fill: Colors.Cyan,
-      },
     });
     this.winValue.x = this.winLabel.x + this.winLabel.width + 20;
     this.panel.addChild(this.winValue);

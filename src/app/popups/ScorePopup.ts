@@ -4,7 +4,6 @@ import { BlurFilter, Container, Sprite, Texture } from "pixi.js";
 import { creationEngine } from "../getCreationEngine";
 import { HighScoreBadge } from "../game-engine/GameEngine";
 import { Label } from "../ui/Label";
-import { Colors } from "../utils/colors";
 
 export class ScorePopup extends Container {
   /** Container for the popup UI components */
@@ -92,7 +91,6 @@ export class ScorePopup extends Container {
       this.multipleSameHighScoreBadgeLabel = new Label({
         text: `x${count}`,
         style: {
-          fill: Colors.Cyan,
           fontSize: 45,
           align: "center",
         },

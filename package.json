@@ -10,7 +10,6 @@
     "dev": "vite --host"
   },
   "dependencies": {
-    "@esotericsoftware/spine-pixi-v8": "^4.2.74",
     "@pixi/sound": "^6.0.1",
     "@pixi/ui": "^2.2.7",
     "fontfaceobserver": "^2.3.0",

@@ -1,6 +1,5 @@
 import { BlurFilter, Container, Sprite, Texture } from "pixi.js";
 import { Label } from "../ui/Label";
-import { Colors } from "../utils/colors";
 import { creationEngine } from "../getCreationEngine";
 import { animate } from "motion";
 import { RoundedBox } from "../ui/RoundedBox";
@@ -46,7 +45,6 @@ Reveal cells and try to find five or more of the same type to win!
 Combination badges: Double (10 or more), Triple (15 or more), Mega (20 or more).
 The bigger your combination, the higher the badge and the greater your reward!`,
       style: {
-        fill: Colors.Cyan,
         fontSize: 26,
         wordWrap: true,
         breakWords: true,

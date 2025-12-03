@@ -1,4 +1,5 @@
 import { pauseAware } from "../../engine/utils/pause";
+import { config } from "../config/config";
 import { creationEngine } from "../getCreationEngine";
 import { ScorePopup } from "../popups/ScorePopup";
 import { BadgesDisplay } from "../screens/main/BadgesDisplay";
@@ -22,6 +23,16 @@ interface WinningCell {
   count: number;
 }
 
+export interface HighScore {
+  badge: HighScoreBadge;
+  multiplier: number;
+  range: { min: number; max: number };
+}
+
+const HIGH_SCORES: HighScore[] = config.highScores;
+
+const CELL_REWARDS: Record<CellType, number> = config.cellRewards;
+
 export const DEFAULT_BADGE_COUNTS: Record<HighScoreBadge, number> = {
   [HighScoreBadge.Double]: 0,
   [HighScoreBadge.Triple]: 0,
@@ -30,8 +41,8 @@ export const DEFAULT_BADGE_COUNTS: Record<HighScoreBadge, number> = {
 
 export class GameEngine {
   private win: number = 0;
-  private balance: number = 2000;
-  private readonly SWEEP_COST = 1000;
+  private balance: number = config.defaultBalance;
+  private readonly SWEEP_COST = config.sweepCost;
   private gameOver: boolean = false;
   private grid!: Grid;
   private balanceDisplay!: BalanceDisplay;
@@ -86,27 +97,10 @@ export class GameEngine {
   public async countTotalReward(winningResult: WinningResult): Promise<number> {
     if (winningResult.won) {
       let totalReward = 0;
-
       for (const winningCell of winningResult.winningCells) {
-        let reward = 0;
-        switch (winningCell.type) {
-          case CellType.Program:
-            reward = 100;
-            break;
-          case CellType.User:
-            reward = 200;
-            break;
-          case CellType.Clue:
-            reward = 500;
-            break;
-          case CellType.Flynn:
-            reward = 1000;
-            break;
-          default:
-            reward = 0;
-        }
-        const multiplier = this.getHighScoreMultiplier(winningCell.count);
-        const finalReward = reward * multiplier;
+        const reward = CELL_REWARDS[winningCell.type];
+        const highScore = this.getHighScore(winningCell.count);
+        const finalReward = reward * (highScore?.multiplier ?? 1);
         totalReward += finalReward;
       }
 
@@ -128,10 +122,10 @@ export class GameEngine {
     console.log("badge count", this.badgeCounts);
     const counts = { ...DEFAULT_BADGE_COUNTS };
     for (const winningCell of winningCells) {
-      const highScoreBadge = this.getHighScoreBadge(winningCell.count);
-      if (highScoreBadge) {
-        counts[highScoreBadge]++;
-        this.badgeCounts[highScoreBadge]++;
+      const highScore = this.getHighScore(winningCell.count);
+      if (highScore) {
+        counts[highScore.badge]++;
+        this.badgeCounts[highScore.badge]++;
       }
     }
     return counts;
@@ -177,8 +171,8 @@ export class GameEngine {
     }
   }
 
-  public async setWinningCells(winningCellsMap: WinningResult) {
-    const winningTypes = winningCellsMap.winningCells.map((win) => win.type);
+  public async setWinningCells(winningResult: WinningResult) {
+    const winningTypes = winningResult.winningCells.map((win) => win.type);
     const revealedCells = this.grid.getRevealedCells();
     const promises = revealedCells.map((cell) => {
       if (winningTypes.includes(cell.getType())) {
@@ -231,26 +225,13 @@ export class GameEngine {
     await this.balanceDisplay.setBalance(this.balance, true, false);
   }
 
-  private getHighScoreBadge(count: number): HighScoreBadge | null {
-    if (count >= 10 && count < 15) {
-      return HighScoreBadge.Double;
-    } else if (count >= 15 && count < 20) {
-      return HighScoreBadge.Triple;
-    } else if (count >= 20) {
-      return HighScoreBadge.Mega;
-    }
-    return null;
-  }
-
-  private getHighScoreMultiplier(count: number): number {
-    if (count >= 10 && count < 15) {
-      return 2;
-    } else if (count >= 15 && count < 20) {
-      return 3;
-    } else if (count >= 20) {
-      return 4;
-    }
-    return 1;
+  private getHighScore(count: number): HighScore | null {
+    return (
+      HIGH_SCORES.find(
+        (highScore) =>
+          count >= highScore.range.min && count < highScore.range.max
+      ) || null
+    );
   }
 
   public getIsGameOver() {

@@ -14,12 +14,12 @@ import { BalanceDisplay } from "./BalanceDisplay";
 import { gameEngine } from "../../getGameEngine";
 import { GameOverPopup } from "../../popups/GameOverPopup";
 import { Label } from "../../ui/Label";
-import { Colors } from "../../utils/colors";
 import { pauseAwareSync } from "../../../engine/utils/pause";
 import { WinningResult } from "../../game-engine/GameEngine";
 import { BadgesDisplay } from "./BadgesDisplay";
 import { DisclaimerPopup } from "../../popups/DisclaimerPopup";
 import { TutorialPopup } from "../../popups/TutorialPopup";
+import { config } from "../../config/config";
 
 /** The screen that holds the app */
 export class MainScreen extends Container {
@@ -62,18 +62,16 @@ export class MainScreen extends Container {
     this.addChild(this.balanceDisplay);
 
     this.grid = new Grid({
-      rows: 5,
-      cols: 5,
-      cellSize: 125,
+      rows: config.grid.rows,
+      cols: config.grid.cols,
+      cellSize: config.grid.cellSize,
     });
     this.grid.pivot.set(this.grid.width / 2, this.grid.height / 2);
     this.addChild(this.grid);
 
     gameEngine().init(this.grid, this.balanceDisplay, this.badgesDisplay);
 
-    this.currentMusicLabel = new Label({
-      style: { fill: Colors.Cyan, fontSize: 22 },
-    });
+    this.currentMusicLabel = new Label({});
 
     this.addChild(this.currentMusicLabel);
 
@@ -115,14 +113,12 @@ export class MainScreen extends Container {
 
     this.sweepButton = new Button({
       text: "Sweep",
-      width: 300,
-      height: 115,
     });
     this.addChild(this.sweepButton);
     this.sweepButton.onPress.connect(async () => {
       console.log("Clicked");
       if (gameEngine().getIsGameOver()) return;
-      if (!gameEngine().hasEnoughBalance()) return;
+      if (!gameEngine().hasEnoughBalance() && !this.isRevealingCells) return;
 
       if (this.isRevealingCells) {
         this.revealAllCells = true;

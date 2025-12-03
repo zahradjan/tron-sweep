@@ -9,7 +9,6 @@ import { Label } from "../ui/Label";
 import { RoundedBox } from "../ui/RoundedBox";
 import { VolumeSlider } from "../ui/VolumeSlider";
 import { userSettings } from "../utils/userSettings";
-import { Colors } from "../utils/colors";
 
 /** Popup for volume */
 export class SettingsPopup extends Container {
@@ -51,7 +50,6 @@ export class SettingsPopup extends Container {
     this.title = new Label({
       text: "Settings",
       style: {
-        fill: Colors.Cyan,
         fontSize: 50,
       },
     });
@@ -68,8 +66,7 @@ export class SettingsPopup extends Container {
     this.versionLabel = new Label({
       text: `Version ${APP_VERSION}`,
       style: {
-        fill: Colors.Cyan,
-        fontSize: 12,
+        fontSize: 14,
       },
     });
     this.versionLabel.alpha = 0.5;

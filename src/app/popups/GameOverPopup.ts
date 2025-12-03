@@ -5,7 +5,6 @@ import { creationEngine } from "../getCreationEngine";
 import { Button } from "../ui/Button";
 import { Label } from "../ui/Label";
 import { RoundedBox } from "../ui/RoundedBox";
-import { Colors } from "../utils/colors";
 import { gameEngine } from "../getGameEngine";
 
 /** Popup that shows up when gameplay is paused */
@@ -52,7 +51,7 @@ export class GameOverPopup extends Container {
 
     this.youWinTitle = new Label({
       text: "Win:",
-      style: { fill: Colors.Cyan, fontSize: 50 },
+      style: { fontSize: 50 },
     });
     this.youWinTitle.y = -125;
     this.panel.addChild(this.youWinTitle);
@@ -60,14 +59,14 @@ export class GameOverPopup extends Container {
     const win = gameEngine().getWin();
     this.winValueLabel = new Label({
       text: `${win}`,
-      style: { fill: Colors.Cyan, fontSize: 50 },
+      style: { fontSize: 50 },
     });
     this.winValueLabel.y = -65;
     this.panel.addChild(this.winValueLabel);
 
     this.balanceLabel = new Label({
       text: "Balance:",
-      style: { fill: Colors.Cyan, fontSize: 50 },
+      style: { fontSize: 50 },
     });
     this.balanceLabel.y = -5;
     this.panel.addChild(this.balanceLabel);
@@ -76,7 +75,7 @@ export class GameOverPopup extends Container {
 
     this.balanceValueLabel = new Label({
       text: `${balance}`,
-      style: { fill: Colors.Cyan, fontSize: 50 },
+      style: { fontSize: 50 },
     });
     this.balanceValueLabel.y = 55;
     this.panel.addChild(this.balanceValueLabel);

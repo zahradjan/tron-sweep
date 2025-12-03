@@ -65,7 +65,6 @@ export class VolumeSlider extends Slider {
       text: label,
       style: {
         align: "left",
-        fill: Colors.Cyan,
         fontSize: 18,
       },
     });

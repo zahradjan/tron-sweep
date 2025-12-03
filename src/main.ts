@@ -16,7 +16,6 @@ import "@pixi/sound";
 import { Colors } from "./app/utils/colors";
 import { GameEngine } from "./app/game-engine/GameEngine";
 import { setGameEngine } from "./app/getGameEngine";
-// import "@esotericsoftware/spine-pixi-v8";
 
 // Create a new creation engine instance
 const creationEngine = new CreationEngine();
