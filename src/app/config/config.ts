@@ -3,8 +3,8 @@ import { HighScoreBadge } from "../model/HighScoreBadge";
 
 export const config = {
   grid: {
-    rows: 4,
-    cols: 4,
+    rows: 6,
+    cols: 6,
     cellSize: 125,
   },
   sweepCost: 1000,
