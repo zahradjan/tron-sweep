@@ -3,7 +3,7 @@ import { setCreationEngine } from "./app/getCreationEngine";
 import { LoadScreen } from "./app/screens/LoadScreen";
 import { MainScreen } from "./app/screens/main/MainScreen";
 import { userSettings } from "./app/utils/userSettings";
-import { CreationEngine } from "./engine/engine";
+import { CreationEngine } from "./creation-engine/CreationEngine";
 
 declare global {
   var __PIXI_APP__: Application;
@@ -14,7 +14,7 @@ declare global {
  */
 import "@pixi/sound";
 import { Colors } from "./app/utils/colors";
-import { GameEngine } from "./app/game-engine/GameEngine";
+import { GameEngine } from "./game-engine/GameEngine";
 import { setGameEngine } from "./app/getGameEngine";
 
 // Create a new creation engine instance

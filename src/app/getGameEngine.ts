@@ -1,4 +1,4 @@
-import { GameEngine } from "./game-engine/GameEngine";
+import { GameEngine } from "../game-engine/GameEngine";
 
 let instance: GameEngine | null = null;
 

@@ -1,4 +1,4 @@
-import { storage } from "../../engine/utils/storage";
+import { storage } from "../../creation-engine/utils/storage";
 import { creationEngine } from "../getCreationEngine";
 
 // Keys for saved items in storage

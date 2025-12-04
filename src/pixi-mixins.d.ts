@@ -1,9 +1,9 @@
-import type { BGM, SFX } from "./engine/audio/audio";
-import type { Navigation } from "./engine/navigation/navigation";
+import type { BGM, SFX } from "./creation-engine/audio/audio";
+import type { Navigation } from "./creation-engine/navigation/navigation";
 import type {
   CreationResizePluginOptions,
   DeepRequired,
-} from "./engine/resize/ResizePlugin";
+} from "./creation-engine/resize/ResizePlugin";
 
 declare global {
   namespace PixiMixins {

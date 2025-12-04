@@ -1,7 +1,7 @@
 import { ExtensionType } from "pixi.js";
 import type { Application, ExtensionMetadata } from "pixi.js";
 
-import type { CreationEngine } from "../engine";
+import type { CreationEngine } from "../CreationEngine";
 
 import { Navigation } from "./navigation";
 

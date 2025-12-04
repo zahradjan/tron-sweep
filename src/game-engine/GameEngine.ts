@@ -1,15 +1,15 @@
-import { pauseAware } from "../../engine/utils/pause";
-import { config } from "../config/config";
-import { creationEngine } from "../getCreationEngine";
-import { CellType } from "../model/CellType";
-import { HighScore } from "../model/HighScore";
-import { HighScoreBadge } from "../model/HighScoreBadge";
-import { WinningCell } from "../model/WinningCell";
-import { WinningResult } from "../model/WinningResult";
-import { ScorePopup } from "../popups/ScorePopup";
-import { BadgesDisplay } from "../screens/main/BadgesDisplay";
-import { BalanceDisplay } from "../screens/main/BalanceDisplay";
-import { Grid } from "../screens/main/Grid";
+import { config } from "../app/config/config";
+import { creationEngine } from "../app/getCreationEngine";
+import { CellType } from "../app/model/CellType";
+import { HighScore } from "../app/model/HighScore";
+import { HighScoreBadge } from "../app/model/HighScoreBadge";
+import { WinningCell } from "../app/model/WinningCell";
+import { WinningResult } from "../app/model/WinningResult";
+import { ScorePopup } from "../app/popups/ScorePopup";
+import { BadgesDisplay } from "../app/screens/main/BadgesDisplay";
+import { BalanceDisplay } from "../app/screens/main/BalanceDisplay";
+import { Grid } from "../app/screens/main/Grid";
+import { pauseAware } from "../creation-engine/utils/pause";
 
 const HIGH_SCORES: HighScore[] = config.highScores;
 

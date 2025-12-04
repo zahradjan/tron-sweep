@@ -1,9 +1,9 @@
 import { Container, Sprite, Texture } from "pixi.js";
 import { Label } from "../../ui/Label";
-import { DEFAULT_BADGE_COUNTS } from "../../game-engine/GameEngine";
 import { animate } from "motion";
 import { creationEngine } from "../../getCreationEngine";
 import { HighScoreBadge } from "../../model/HighScoreBadge";
+import { DEFAULT_BADGE_COUNTS } from "../../../game-engine/GameEngine";
 
 export class BadgesDisplay extends Container {
   private panel: Container;

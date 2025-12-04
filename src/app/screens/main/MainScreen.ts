@@ -14,7 +14,7 @@ import { BalanceDisplay } from "./BalanceDisplay";
 import { gameEngine } from "../../getGameEngine";
 import { GameOverPopup } from "../../popups/GameOverPopup";
 import { Label } from "../../ui/Label";
-import { pauseAwareSync } from "../../../engine/utils/pause";
+import { pauseAwareSync } from "../../../creation-engine/utils/pause";
 import { BadgesDisplay } from "./BadgesDisplay";
 import { DisclaimerPopup } from "../../popups/DisclaimerPopup";
 import { TutorialPopup } from "../../popups/TutorialPopup";
