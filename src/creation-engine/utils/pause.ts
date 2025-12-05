@@ -1,4 +1,4 @@
-import { GameEngine } from "../../app/game-engine/GameEngine";
+import { GameEngine } from "../../game-engine/GameEngine";
 
 export async function pauseAware<T>(
   fn: () => Promise<T>,
