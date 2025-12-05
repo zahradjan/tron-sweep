@@ -126,8 +126,8 @@ export class GameEngine {
     }
   }
 
-  public async updateBadgeDisplay() {
-    await this.badgesDisplay.setBadges(this.badgeCounts);
+  public updateBadgeDisplay() {
+    this.badgesDisplay.setBadges(this.badgeCounts);
   }
 
   public async revealCells(shouldRevealAll?: () => boolean) {

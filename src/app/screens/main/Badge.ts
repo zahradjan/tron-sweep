@@ -40,7 +40,7 @@ export class Badge extends Container {
     this.badgeLabel.text = `x${count}`;
   }
 
-  public async show() {
+  public show() {
     this.visible = true;
     this.sprite.scale.set(0, 0);
     this.badgeLabel.scale.set(0, 0);

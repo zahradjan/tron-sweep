@@ -34,14 +34,14 @@ export class BadgesDisplay extends Container {
     this.panel.y = height * 0.5;
   }
 
-  public async setBadges(updatedBadgeCounts: Record<HighScoreBadge, number>) {
+  public setBadges(updatedBadgeCounts: Record<HighScoreBadge, number>) {
     for (const badge of this.badges) {
       const type = badge.getType();
       const count = updatedBadgeCounts[type] ?? 0;
       this.badgeCounts[type] = count;
       if (count > 0) {
         if (!badge.visible) {
-          await badge.show();
+          badge.show();
         }
         badge.setCount(count);
       }

@@ -151,7 +151,7 @@ export class MainScreen extends Container {
         await new Promise((resolve) => setTimeout(resolve, 1000));
         await gameEngine().showHighScoreBadges(highScoreBadges);
 
-        await gameEngine().updateBadgeDisplay();
+        gameEngine().updateBadgeDisplay();
 
         await gameEngine().countTotalReward(winningResult);
       } catch (error) {
