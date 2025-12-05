@@ -117,7 +117,6 @@ export class MainScreen extends Container {
     this.addChild(this.sweepButton);
     this.sweepButton.onPress.connect(async () => {
       console.log("Clicked");
-      if (gameEngine().getIsGameOver()) return;
       if (!gameEngine().hasEnoughBalance() && !this.isRevealingCells) return;
 
       if (this.isRevealingCells) {
@@ -151,7 +150,8 @@ export class MainScreen extends Container {
         );
         await new Promise((resolve) => setTimeout(resolve, 1000));
         await gameEngine().showHighScoreBadges(highScoreBadges);
-        await gameEngine().setBadgesInBadgesDisplay();
+
+        await gameEngine().updateBadgeDisplay();
 
         await gameEngine().countTotalReward(winningResult);
       } catch (error) {

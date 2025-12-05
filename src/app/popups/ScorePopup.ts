@@ -71,10 +71,7 @@ export class ScorePopup extends Container {
   public setHighScoreBadge(badge: HighScoreBadge, count: number) {
     // Get the badge and count from the object
 
-    console.log("badge", badge);
-    console.log("count", count);
     this.highScoreBadge = badge;
-    console.log("highScoreBadge", this.highScoreBadge);
 
     this.highScoreBadgeImage = new Sprite({
       texture: Texture.from(

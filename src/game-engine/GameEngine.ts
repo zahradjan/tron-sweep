@@ -25,15 +25,14 @@ export class GameEngine {
   private win: number = 0;
   private balance: number = config.defaultBalance;
   private readonly SWEEP_COST = config.sweepCost;
-  private gameOver: boolean = false;
   private grid!: Grid;
-  private balanceDisplay!: BalanceDisplay;
   private paused = false;
   private pausePromise: Promise<void> | null = null;
   private pauseResolver: (() => void) | null = null;
   private badgeCounts: Record<HighScoreBadge, number> = {
     ...DEFAULT_BADGE_COUNTS,
   };
+  private balanceDisplay!: BalanceDisplay;
   private badgesDisplay!: BadgesDisplay;
 
   constructor() {}
@@ -88,7 +87,6 @@ export class GameEngine {
 
       this.win += totalReward;
       this.balance += this.win;
-      console.log("Win: ", this.win);
       await pauseAware<void>(
         () => this.balanceDisplay.setWinValue(this.win),
         this
@@ -101,7 +99,6 @@ export class GameEngine {
     }
   }
   public countHighScoreBadges(winningCells: WinningCell[]) {
-    console.log("badge count", this.badgeCounts);
     const counts = { ...DEFAULT_BADGE_COUNTS };
     for (const winningCell of winningCells) {
       const highScore = this.getHighScore(winningCell.count);
@@ -125,12 +122,11 @@ export class GameEngine {
         });
         await new Promise((resolve) => setTimeout(resolve, 2000));
         await creationEngine().navigation.dismissPopup();
-        console.log(`${badge}! x${count}`);
       }
     }
   }
 
-  public async setBadgesInBadgesDisplay() {
+  public async updateBadgeDisplay() {
     await this.badgesDisplay.setBadges(this.badgeCounts);
   }
 
@@ -196,7 +192,6 @@ export class GameEngine {
   public hasEnoughBalance() {
     if (this.balance < this.SWEEP_COST) {
       console.log("Not enough balance!");
-      this.gameOver = true;
       return false;
     }
     return true;
@@ -214,10 +209,6 @@ export class GameEngine {
           count >= highScore.range.min && count < highScore.range.max
       ) || null
     );
-  }
-
-  public getIsGameOver() {
-    return this.gameOver;
   }
 
   public getWin() {

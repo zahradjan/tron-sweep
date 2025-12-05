@@ -1,6 +1,21 @@
 # Patch Notes
 
-## v1.0.1 (2025-12-04)
+## v1.0.2
+
+### Changed
+
+- Updated project version to 1.0.2 in package.json.
+- Refactored BadgesDisplay and Badge classes for better OOP and maintainability.
+- Centralized badge creation and animation logic in Badge class.
+- Improved naming conventions for badge popup and display update methods (e.g., presentHighScoreBadgePopups, updateBadgeDisplay).
+- Clarified GameEngine orchestration pattern and UI dependencies in code comments.
+
+### Fixed
+
+- Ensured badges are properly shown/hidden and animated when counts change.
+- Fixed visibility issues with badge containers and labels.
+
+## v1.0.1
 
 ### Added
 
