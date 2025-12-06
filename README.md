@@ -59,10 +59,10 @@ pnpm build
 
 ## Disc Values
 
-- **Program** (Blue): 100 credits
+- **Program** (Yellow): 100 credits
 - **User** (Cyan): 200 credits
-- **Clue** (Green): 500 credits
-- **Flynn** (Orange): 1000 credits
+- **Clue** (Orange): 500 credits
+- **Flynn** (Light Cyan): 1000 credits
 
 ## Configuration
 
