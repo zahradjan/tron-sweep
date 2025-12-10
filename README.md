@@ -8,7 +8,7 @@
 
 - **Grid-based gameplay**: Click to reveal cells and discover hidden discs.
 - **High Score Badges**: Earn Double, Triple, and Mega badges by matching 10, 15, or 20+ discs respectively.
-- **Reward System**: Different disc types have different values (Program, User, Clue, Flynn).
+- **Reward System**: Different disc types have different values (Program, User, CLU, Flynn).
 - **Animated UI**: Smooth animations powered by Motion (Framer Motion for PixiJS).
 - **Responsive Design**: Works on desktop and mobile devices.
 - **TRON-themed**: Neon aesthetics and sound effects inspired by the TRON franchise.
@@ -61,7 +61,7 @@ pnpm build
 
 - **Program** (Yellow): 100 credits
 - **User** (Cyan): 200 credits
-- **Clue** (Orange): 500 credits
+- **CLU** (Orange): 500 credits
 - **Flynn** (Light Cyan): 1000 credits
 
 ## Configuration

@@ -1,6 +1,6 @@
 export enum CellType {
   Program = "program",
   User = "user",
-  Clue = "clue",
+  CLU = "clu",
   Flynn = "flynn",
 }

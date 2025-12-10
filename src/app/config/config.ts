@@ -29,7 +29,7 @@ export const config = {
   cellRewards: {
     [CellType.Program]: 100,
     [CellType.User]: 200,
-    [CellType.Clue]: 500,
+    [CellType.CLU]: 500,
     [CellType.Flynn]: 1000,
   },
 };

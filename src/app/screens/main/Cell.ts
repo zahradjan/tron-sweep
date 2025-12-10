@@ -7,7 +7,7 @@ import { CellValue } from "../../model/CellValue";
 const cellSpritesMap = {
   [CellType.Program]: "tron-disc-100.png",
   [CellType.User]: "tron-disc-200.png",
-  [CellType.Clue]: "tron-disc-500.png",
+  [CellType.CLU]: "tron-disc-500.png",
   [CellType.Flynn]: "tron-disc-1000.png",
 };
 
@@ -22,10 +22,10 @@ export const CELL_VALUES: Record<CellType, CellValue> = {
     price: 200,
     sprite: cellSpritesMap[CellType.User],
   },
-  [CellType.Clue]: {
-    type: CellType.Clue,
+  [CellType.CLU]: {
+    type: CellType.CLU,
     price: 500,
-    sprite: cellSpritesMap[CellType.Clue],
+    sprite: cellSpritesMap[CellType.CLU],
   },
   [CellType.Flynn]: {
     type: CellType.Flynn,
