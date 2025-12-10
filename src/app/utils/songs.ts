@@ -1,4 +1,6 @@
-export const bgmSongs: ReadonlyArray<{ title: string; path: string }> = [
+import { Song } from "../model/Song";
+
+export const bgmSongs: ReadonlyArray<Song> = [
   {
     title: "Daft Punk - End of Line",
     path: "main/sounds/music/tron-legacy-end-of-line-daft-punk.mp3",
