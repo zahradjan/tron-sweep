@@ -4,7 +4,7 @@ import { Label } from "../../ui/Label";
 import { animate } from "motion";
 const BADGE_CONFIG = {
   [HighScoreBadge.Double]: { texture: "tron-double.png", label: "x0" },
-  [HighScoreBadge.Triple]: { texture: "tron-triple.png", label: "" },
+  [HighScoreBadge.Triple]: { texture: "tron-triple.png", label: "x0" },
   [HighScoreBadge.Mega]: { texture: "tron-mega.png", label: "x0" },
 };
 
@@ -20,14 +20,14 @@ export class Badge extends Container {
     this.sprite = new Sprite({
       texture: Texture.from(badgeConfig.texture),
       anchor: 0.5,
-      scale: 0.1,
+      scale: 0.15,
     });
     this.sprite.x = 0;
     this.sprite.y = 0;
 
     this.badgeLabel = new Label({ text: badgeConfig.label });
     this.badgeLabel.x = 0;
-    this.badgeLabel.y = 60;
+    this.badgeLabel.y = 80;
 
     this.addChild(this.sprite);
     this.addChild(this.badgeLabel);
@@ -46,7 +46,7 @@ export class Badge extends Container {
     this.badgeLabel.scale.set(0, 0);
     animate(
       this.sprite.scale,
-      { x: 0.1, y: 0.1 },
+      { x: 0.15, y: 0.15 },
       { duration: 0.3, ease: "backOut" }
     );
     animate(

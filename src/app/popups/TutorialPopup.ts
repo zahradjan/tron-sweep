@@ -76,7 +76,7 @@ The bigger your combination, the higher the badge and the greater your reward!`,
     this.megaBadge = new Sprite({
       texture: Texture.from("tron-mega.png"),
       anchor: 0.5,
-      scale: 0.23,
+      scale: 0.2,
     });
     this.megaBadge.y = 150;
     this.megaBadge.x = 250;
