@@ -1,5 +1,11 @@
 # Patch Notes
 
+## v1.0.3
+
+### Changed
+
+- Updated Tron disc and score images for improved visuals.
+
 ## v1.0.2
 
 ### Changed
