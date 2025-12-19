@@ -71,8 +71,14 @@ export class BGM {
     const songs = bgmSongs;
     if (songs.length === 0) return;
 
-    const pickRandomSong = () =>
-      songs[Math.floor(Math.random() * songs.length)];
+    const pickRandomSong = () => {
+      let song = songs[Math.floor(Math.random() * songs.length)];
+      if (songs.length === 1) return songs[0];
+      while (this.currentTitle && song.title === this.currentTitle) {
+        song = songs[Math.floor(Math.random() * songs.length)];
+      }
+      return song;
+    };
 
     const playNext = async () => {
       const song = pickRandomSong();

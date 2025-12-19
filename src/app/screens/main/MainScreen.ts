@@ -226,7 +226,7 @@ export class MainScreen extends Container {
 
     this.badgesDisplay.x = width - 200;
     this.badgesDisplay.y = height - 300;
-
+    this.badgesDisplay.scale.set(0.8);
     this.currentMusicLabel.anchor.set(0, 1);
     this.currentMusicLabel.x = 50;
     this.currentMusicLabel.y = height - 100;
@@ -237,8 +237,10 @@ export class MainScreen extends Container {
     if (width < 900) {
       this.currentMusicLabel.x = 50;
       this.currentMusicLabel.y = this.logo.height;
-      this.balanceDisplay.y = height - 150;
       this.balanceDisplay.x = width / 2;
+      this.balanceDisplay.y = height - 150;
+      this.badgesDisplay.x = width;
+      this.badgesDisplay.scale.set(0.6);
       this.badgesDisplay.y = this.logo.height;
       this.sweepButton.y = height - 300;
     }
